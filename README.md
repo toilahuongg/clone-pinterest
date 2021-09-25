@@ -1,10 +1,10 @@
 # Bài Tập Lớn Python
 ## Thành viên
-#### Vũ Bá Hướng (leader)
-#### Phan Thanh Hải
-#### Phan Thiên Hưng
-#### Vũ Kim Phúc
-#### Bùi Ngọc Anh
+* Vũ Bá Hướng (leader)
+* Phan Thanh Hải
+* Phan Thiên Hưng
+* Vũ Kim Phúc
+* Bùi Ngọc Anh
 # Install Project
 ## Backend
 
