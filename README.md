@@ -10,7 +10,7 @@
 ``` cd backend ```
 ### Config
 
-- copy file .env.example and rename this to .env
+- copy file **.env.example** and rename this to **.env**
 - Install **pipenv**: ``` pip install pipenv ```
 - Install packages:
 ``` pipenv install```
