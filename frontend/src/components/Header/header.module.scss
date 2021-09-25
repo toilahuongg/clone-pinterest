@@ -1,0 +1,59 @@
+@import '../../variable.scss';
+.header {
+  padding: 10px;
+  background-color: $background-color-light;
+}
+
+
+.menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo {
+  width: 40px;
+  border-radius: 50%;
+  background-color: #efefef;
+  padding: 5px;
+  img {
+    width: 100%;
+    height: auto;
+  }
+}
+.home {
+  width: 10%;
+  min-width: 150px;
+  background: #000;
+  border-radius: 30px;
+  a {
+    color: #fff;
+    padding: 0.8em 2rem;
+    font-size: 18px;
+    font-weight: 500;
+    display: block;
+    text-decoration: none;
+  }
+}
+.search {
+  width: 50%;
+  position: relative;
+  input {
+    width: 100%;
+    background: #efefef;
+    border: none;
+    padding: 0.8em 2rem;
+    padding-left: 2.5rem;
+    border-radius: 30px;
+  }
+  input:focus {
+    box-shadow: rgb(0 132 255 / 50%) 0px 0px 0px 4px;
+  }
+  span {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 15px;
+    font-size: 20px;
+    color: #848484;
+  }
+}
