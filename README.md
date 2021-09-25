@@ -11,16 +11,16 @@
 ### Config
 
 - copy file .env.example and rename this to .env
+- Install **pipenv**: ``` pip install pipenv ```
 - Install packages:
-``` pip install -r requirements.txt ```
+``` pipenv install```
 ### Install something package
-``` ./pip-save.sh <name-package> ```
+``` pipenv install <name-package> ```
 * example:
-``` ./pip-save.sh python-dotenv ```
+``` pipenv install python-dotenv ```
 ### Run server
 ``` flask run ```
 ## Frontend
-
 
 ``` cd frontend ```
 ### Install packages
