@@ -5,10 +5,8 @@
 * Phan Thiên Hưng
 * Vũ Kim Phúc
 * Bùi Ngọc Anh
-
 # Install Project
 ## Backend
-
 ``` cd backend ```
 ### Install packages
 ``` pip install -r requirements.txt ```
