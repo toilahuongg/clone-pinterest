@@ -19,4 +19,4 @@
 ### Install packages
 ``` npm install ```
 ### Run server
-``` npm run dev ```
+``` npm run start ```
