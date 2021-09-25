@@ -1,6 +1,6 @@
 backend/*.pyc
-backend/*/__pycache__
-backend/*/__pycache__
+backend/__pycache__
+backend/.env
 
 # dependencies
 frontend/node_modules
@@ -16,10 +16,7 @@ frontend/build
 
 # misc
 frontend/.DS_Store
-frontend/.env.local
-frontend/.env.development.local
-frontend/.env.test.local
-frontend/.env.production.local
+frontend/.env
 
 frontend/npm-debug.log*
 frontend/yarn-debug.log*
