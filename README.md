@@ -9,15 +9,12 @@
 ## Backend
 ``` cd backend ```
 ### Config
-
 - copy file **.env.example** and rename this to **.env**
-- Install **pipenv**: ``` pip install pipenv ```
-- Install packages:
-``` pipenv install```
-### Install something package
-``` pipenv install <name-package> ```
-* example:
-``` pipenv install python-dotenv ```
+- Setup Environment ``` python3 -m venv env ``` 
+- Activate ``` . env/Scripts/activate ```
+- Install packages: ``` pip install -r requirements.txt ```
+### Before deploying
+``` pip freeze > requirements.txt ```
 ### Run server
 ``` flask run ```
 ## Frontend
