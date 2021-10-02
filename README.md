@@ -10,8 +10,8 @@
 ``` cd backend ```
 ### Config
 - copy file **.env.example** and rename this to **.env**
-- Setup Environment ``` python3 -m venv env ``` 
-- Activate ``` . env/Scripts/activate ```
+- Setup Environment ``` python -m venv venv ``` 
+- Activate ``` . venv/Scripts/activate ```
 - Install packages: ``` pip install -r requirements.txt ```
 ### Before deploying
 ``` pip freeze > requirements.txt ```
