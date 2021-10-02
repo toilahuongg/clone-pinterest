@@ -5,33 +5,34 @@ db = SQLAlchemy()
 class User(db.Model):
   __tablename__ = 'users'
   id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-  username = db.Column(db.String(100), unique=True)
-  password = db.Column(db.String(100))
-  fullname = db.Column(db.String(100))
-  email = db.Column(db.String(100), unique=True)
-  gender = db.Column(db.String(100))
+  username = db.Column(db.String(100), unique=True, nullable=False)
+  password = db.Column(db.String(100), nullable=False)
+  fullname = db.Column(db.String(100), nullable=False)
+  email = db.Column(db.String(100), unique=True, nullable=False)
+  gender = db.Column(db.String(100), nullable=False)
   role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=False)
-  collections = db.relationship('Collection', backref='collection', lazy=True)
+  collections = db.relationship('Collection', backref='collection', lazy=True)  
+  active = db.Column(db.Boolean, default=True, nullable=False),  
   createdAt = db.Column(db.DateTime, default=db.func.now())
-  updatedAt = db.Column(db.DateTime, default=db.func.now())
+  updatedAt = db.Column(db.DateTime, default=db.func.now(), server_onupdate=db.func.now())
 
 class Role(db.Model):
   __tablename__ = 'roles'
   id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-  name = db.Column(db.String(100), unique=True)
-  value = db.Column(db.String(100), unique=True)
+  name = db.Column(db.String(100), unique=True, nullable=False)
+  value = db.Column(db.String(100), unique=True, nullable=False)
   users = db.relationship('User', backref='role', lazy=True)
   createdAt = db.Column(db.DateTime, default=db.func.now())
-  updatedAt = db.Column(db.DateTime, default=db.func.now())
+  updatedAt = db.Column(db.DateTime, default=db.func.now(), server_onupdate=db.func.now())
 
 class Collection(db.Model):
   __tablename__ = 'collections'
   id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-  title = db.Column(db.String(100), unique=True)
+  title = db.Column(db.String(100), unique=True, nullable=False)
   description = db.Column(db.String(100))
   user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
   createdAt = db.Column(db.DateTime, default=db.func.now())
-  updatedAt = db.Column(db.DateTime, default=db.func.now())
+  updatedAt = db.Column(db.DateTime, default=db.func.now(), server_onupdate=db.func.now())
 class AlchemyEncoder(json.JSONEncoder):
   def default(self, obj):
     if isinstance(obj.__class__, DeclarativeMeta):

@@ -4,7 +4,7 @@ from flask import render_template
 import os
 from routes.userRouter import userRouter
 from routes.collectionRouter import collectionRouter
-from models import db, Role
+from models import User, db, Role
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DATABASE_URI')
@@ -33,15 +33,36 @@ def db_drop():
 
 @app.cli.command('db_seed')
 def db_seed():
+    roleAdmin = Role(
+        name="Admin",
+        value="admin"
+    )
+    roleMember = Role(
+        name="Member",
+        value="member"
+    )
+    userAdmin = User(
+        username="admin",
+        fullname="admin",
+        password="$2b$12$RO5ip9d.uRNo6qgnAdboTe0ucmif5DrqfFhqFs0AiJ.oOwiO7sQby",
+        email="admin@gmail.com",
+        gender="male",
+        role=roleAdmin
+    )
+    userMember = User(
+        username="member",
+        fullname="member",
+        password="$2b$12$RO5ip9d.uRNo6qgnAdboTe0ucmif5DrqfFhqFs0AiJ.oOwiO7sQby",
+        email="member@gmail.com",
+        gender="male",
+        role=roleMember
+    )
+
     db.session.add_all([
-        Role(
-            name="Admin",
-            value="admin"
-        ),
-        Role(
-            name="Member",
-            value="member"
-        ),
+        roleAdmin,
+        roleMember,
+        userAdmin,
+        userMember,
     ])
     db.session.commit()
     print('Database seed!')
