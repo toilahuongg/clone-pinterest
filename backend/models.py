@@ -12,7 +12,6 @@ class User(db.Model):
   gender = db.Column(db.String(100), nullable=False)
   role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=False)
   collections = db.relationship('Collection', backref='collection', lazy=True)  
-  active = db.Column(db.Boolean, default=True, nullable=False),  
   createdAt = db.Column(db.DateTime, default=db.func.now())
   updatedAt = db.Column(db.DateTime, default=db.func.now(), server_onupdate=db.func.now())
 
