@@ -43,7 +43,7 @@ def register():
     hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     
     #Save database
-    role = Role(id=2)
+    role = Role.query.filter_by(id=2).first()
     user = User(
       username=username,
       password=hashed.decode('utf-8'),
@@ -90,4 +90,4 @@ def login():
 @Auth
 @Admin
 def checkUser():
-  return request.username
+  return request.userId

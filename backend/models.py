@@ -11,15 +11,14 @@ class User(db.Model):
   email = db.Column(db.String(100), unique=True, nullable=False)
   gender = db.Column(db.String(100), nullable=False)
   role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=False)
-  collections = db.relationship('Collection', backref='collection', lazy=True)  
+  collections = db.relationship('Collection', backref='user', lazy=True)  
   createdAt = db.Column(db.DateTime, default=db.func.now())
   updatedAt = db.Column(db.DateTime, default=db.func.now(), server_onupdate=db.func.now())
-
 class Role(db.Model):
   __tablename__ = 'roles'
   id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-  name = db.Column(db.String(100), unique=True, nullable=False)
-  value = db.Column(db.String(100), unique=True, nullable=False)
+  name = db.Column(db.String(100), unique=True)
+  value = db.Column(db.String(100), unique=True)
   users = db.relationship('User', backref='role', lazy=True)
   createdAt = db.Column(db.DateTime, default=db.func.now())
   updatedAt = db.Column(db.DateTime, default=db.func.now(), server_onupdate=db.func.now())
@@ -30,6 +29,7 @@ class Collection(db.Model):
   title = db.Column(db.String(100), unique=True, nullable=False)
   description = db.Column(db.String(100))
   user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+  isPublish = db.Column(db.Boolean, default=True)
   createdAt = db.Column(db.DateTime, default=db.func.now())
   updatedAt = db.Column(db.DateTime, default=db.func.now(), server_onupdate=db.func.now())
 class AlchemyEncoder(json.JSONEncoder):
