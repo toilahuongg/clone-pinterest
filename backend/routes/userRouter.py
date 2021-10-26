@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from flask import Blueprint, json, Response, request, jsonify
 import re, bcrypt, jwt, os
 from models import User, Role, AlchemyEncoder, db
-from middlewares import Auth, Admin
+from middlewares import Auth
 
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
 def checkEmail(email):
@@ -88,6 +88,6 @@ def login():
 #Api kiểm tra user
 @userRouter.route('/auth', methods=['GET'])
 @Auth
-@Admin
+# @Admin
 def checkUser():
-  return request.userId
+  return str(request.userId)
