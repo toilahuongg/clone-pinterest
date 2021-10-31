@@ -1,13 +1,16 @@
 from flask import Blueprint, request, jsonify, json, Response
+from middlewares import Auth
 from models import AlchemyEncoder, Collection, User, db
 collectionRouter = Blueprint('collectionRouter', __name__)
 
 @collectionRouter.route('', methods=["POST"])
+@Auth
 def postCollection():
   title = request.form.get('title', '')
   description = request.form.get('description', '')
   isPublish = request.form.get('isPublish', 'true')
-  user = User.query.filter_by(id=1).first()
+  if not title: return jsonify({'error': 'title không được để trống'}), 400
+  user = User.query.filter_by(id=request.userId).first()
   data = Collection(
     title=title,
     description=description,
