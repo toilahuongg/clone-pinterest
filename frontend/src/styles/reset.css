@@ -23,6 +23,7 @@ time, mark, audio, video {
 	padding: 0;
 	border: 0;
 	font-size: 100%;
+    font: inherit;
 	vertical-align: baseline;
 }
 
@@ -366,4 +367,14 @@ textarea {
     background: #ccc;
     color: #000;
     padding: 0.2em 0;
+}
+* {
+    box-sizing: border-box;
+}
+body {
+    overflow-y: hidden;
+}
+#root {
+    height: 100vh;
+    overflow-y: auto;
 }

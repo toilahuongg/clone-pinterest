@@ -90,4 +90,6 @@ def login():
 @Auth
 # @Admin
 def checkUser():
+  user = User.query.filter_by(id=request.userId).first()
+  print(user)
   return str(request.userId)

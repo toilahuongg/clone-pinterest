@@ -32,7 +32,10 @@
     "import/no-self-import": "off",
     "no-restricted-globals": "off",
     "class-methods-use-this": "off",
-    "@typescript-eslint/quotes": "off"
+    "@typescript-eslint/quotes": "off",
+    "prettier/prettier": ["error",{
+      "endOfLine": "auto"}
+    ]
   },
   "globals": {
     "localStorage": true,
