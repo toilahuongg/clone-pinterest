@@ -4,6 +4,7 @@ from flask import render_template
 import os
 from routes.userRouter import userRouter
 from routes.collectionRouter import collectionRouter
+
 from models import User, db, Role
 
 app = Flask(__name__)
@@ -52,7 +53,7 @@ def db_seed():
     userMember = User(
         username="member",
         fullname="member",
-        password="$2b$12$RO5ip9d.uRNo6qgnAdboTe0ucmif5DrqfFhqFs0AiJ.oOwiO7sQby",
+        password="mu0-5liv",
         email="member@gmail.com",
         gender="male",
         role=roleMember

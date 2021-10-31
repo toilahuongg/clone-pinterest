@@ -3,6 +3,7 @@ from flask import Blueprint, json, Response, request, jsonify
 import re, bcrypt, jwt, os
 from models import User, Role, AlchemyEncoder, db
 from middlewares import Auth
+from flask import render_template
 
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
 def checkEmail(email):
@@ -12,6 +13,9 @@ def checkEmail(email):
 
 
 userRouter = Blueprint('userRouter', __name__)
+@userRouter.route("/")
+def hello_world():
+    return render_template("index.html")
 
 @userRouter.route('/register', methods=['POST'])
 def register():
@@ -91,3 +95,36 @@ def login():
 # @Admin
 def checkUser():
   return str(request.userId)
+
+
+@userRouter.route('/view/<id>', methods=["GET"])
+#@Auth
+def viewInfromation(id):
+  userIf= User.query.filter_by(id=id).first()
+  if not userIf: return Response('No Authorization', status=401)
+  return Response(json.dumps(userIf, cls=AlchemyEncoder), mimetype='application/json', status=200)
+
+@userRouter.route('/update/<id>', methods=["PUT"])
+def putUserInfomations(id):
+  userIf= User.query.filter_by(id=id).first()
+  if not userIf: return Response('No Authorization', status=401)
+  try:
+    fullname = request.form.get('fullname', '')
+    email = request.form.get('email', '')
+    gender = request.form.get('gender', '')
+    if not fullname: return jsonify({'error': 'Ten không được để trống'}), 400
+    if not email: return jsonify({'error': 'Email không được để trống'}), 400
+    if not checkEmail(email): return jsonify({'error': 'Email không hợp lệ'}), 400
+    if User.query.filter_by(email=email).first(): return jsonify({'error': 'Email đã được sử dụng'}), 400
+    if not gender: return jsonify({'error': 'Gioi tinh không được để trống'}), 400
+    userChange = User.query.filter_by(id=id).update(dict(
+        fullname=fullname,
+        email=email,
+        gender=gender,
+    )) 
+    db.session.commit()
+    return Response(json.dumps(userChange, cls=AlchemyEncoder), mimetype='application/json', status=200)
+  except NameError:
+    return jsonify({'error': 'Đã xảy ra lỗi'}), 400
+ 
+

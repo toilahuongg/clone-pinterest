@@ -1,6 +1,9 @@
 from flask import Blueprint, request, jsonify, json, Response
 from models import AlchemyEncoder, Collection, User, db
+
 collectionRouter = Blueprint('collectionRouter', __name__)
+
+
 
 @collectionRouter.route('', methods=["POST"])
 def postCollection():
