@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react';
 import React, { useState } from 'react';
 import { FaUser } from 'react-icons/fa';
 import { FiSearch } from 'react-icons/fi';
@@ -10,13 +11,18 @@ import Modal from '../Modal';
 import styles from './header.module.scss';
 
 const Header: React.FC = () => {
-  const isAuth = useAuth();
+  const { isAuth, setToken } = useAuth();
 
   const [modalRegisterActive, setModalRegisterActive] = useState<boolean>(false);
   const toggleModalRegisterActive = () => setModalRegisterActive(!modalRegisterActive);
 
   const [modalLoginActive, setModalLoginActive] = useState<boolean>(false);
   const toggleModalLoginActive = () => setModalLoginActive(!modalLoginActive);
+
+  const handleLogout = () => {
+    setToken('');
+    window.location.href = '/';
+  };
   return (
     <header className={styles.header}>
       <ul className={styles.navbar}>
@@ -40,7 +46,13 @@ const Header: React.FC = () => {
           </div>
           <div className={styles.menu}>
             <ul>
-              {!isAuth && (
+              {isAuth ? (
+                <>
+                  <li onClick={handleLogout} role="presentation">
+                    Đăng xuất
+                  </li>
+                </>
+              ) : (
                 <>
                   <li className={styles.main}> Bạn đã có tài khoản chưa?</li>
                   <li onClick={() => toggleModalRegisterActive()} role="presentation">
@@ -60,13 +72,13 @@ const Header: React.FC = () => {
           <Modal isShow={modalRegisterActive} onClose={toggleModalRegisterActive}>
             <Modal.Header> Đăng ký </Modal.Header>
             <Modal.Body>
-              <Register />
+              <Register onClose={toggleModalRegisterActive} openLogin={toggleModalLoginActive} />
             </Modal.Body>
           </Modal>
           <Modal isShow={modalLoginActive} onClose={toggleModalLoginActive}>
             <Modal.Header> Đăng Nhập </Modal.Header>
             <Modal.Body>
-              <Login />
+              <Login onClose={toggleModalLoginActive} openRegister={toggleModalRegisterActive} />
             </Modal.Body>
           </Modal>
         </>
@@ -74,4 +86,4 @@ const Header: React.FC = () => {
     </header>
   );
 };
-export default Header;
+export default observer(Header);

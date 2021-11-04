@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Header from './components/Layout/Header';
 
@@ -19,6 +21,7 @@ const App: React.FC = () => {
           </Switch>
         </React.Suspense>
       </div>
+      <ToastContainer />
     </Router>
   );
 };
