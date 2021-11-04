@@ -16,12 +16,12 @@ userRouter = Blueprint('userRouter', __name__)
 @userRouter.route('/register', methods=['POST'])
 def register():
   try:
-    username = request.form.get('username', '').strip().lower()
-    fullname = request.form.get('fullname', username)
-    password = request.form.get('password', '')
-    confirm = request.form.get('confirm', '')
-    email = request.form.get('email', '')
-    gender = request.form.get('gender', 'male')
+    username = str(request.json['username']).strip().lower()
+    fullname = request.json['fullname'] if request.json['fullname'] else username
+    password = request.json['password']
+    confirm = request.json['confirm']
+    email = request.json['email']
+    gender = request.json['gender'] if request.json['gender'] else 'male'
 
     #Validate username
     if not username: return jsonify({'error': 'Tài khoản không được để trống'}), 400
@@ -62,8 +62,8 @@ def register():
 @userRouter.route('/login', methods=['POST'])
 def login():
   try:
-    username = request.form.get('username', '').strip().lower()
-    password = request.form.get('password', '')
+    username = str(request.json['username']).strip().lower()
+    password = request.json['password']
 
     #Validate username
     if not username: return jsonify({'error': 'Tài khoản không được để trống'}), 400

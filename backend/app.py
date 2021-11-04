@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import render_template
+from flask_cors import CORS
 
 import os
 from routes.userRouter import userRouter
@@ -7,6 +8,7 @@ from routes.collectionRouter import collectionRouter
 from models import User, db, Role
 
 app = Flask(__name__)
+CORS(app)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DATABASE_URI')
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 db.init_app(app)
