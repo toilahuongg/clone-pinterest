@@ -1,7 +1,7 @@
 import React from 'react';
+import Lazyload from 'src/components/Layout/Lazyload';
+import { TImage } from 'src/types/image.type';
 
-import { TImage } from '../../types/image.type';
-import Lazyload from '../Layout/Lazyload';
 import styles from './image.module.scss';
 
 const ImageItem: React.FC<{ item: TImage }> = ({ item }) => {

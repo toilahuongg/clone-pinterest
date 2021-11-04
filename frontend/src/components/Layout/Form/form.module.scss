@@ -1,0 +1,32 @@
+.default {
+  border-radius: 10px;
+  padding: 0.5em 0.75em;
+  border: 2px solid #ddd;
+  width: 100%;
+  transition: .3s ease;
+  &:hover, &:focus {
+    border: 2px solid #000;
+  }
+}
+.formGroup {
+  margin: 10px 0;
+}
+.formLabel {
+  display: block;
+  margin-bottom: 0.5em;
+  color: rgb(142, 142, 142);
+  font-size: 14px;
+}
+.formInput {
+  @extend .default;
+}
+.formSelect {
+  @extend .default;
+}
+.formText {
+  font-size: 12px;
+  padding: 5px;
+  &.error {
+    color: red;
+  }
+}

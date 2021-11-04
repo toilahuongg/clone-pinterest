@@ -1,0 +1,61 @@
+$primary: #000;
+$second: #E02401;
+.btn {
+  outline: none;
+  border-radius: 10px;
+  border: none;
+  background-color: none;
+  padding: 0.3em 1.25em;
+  line-height: 1.5em;
+  font-weight: 700;
+  margin: 10px 0;
+}
+.block {
+  width: 100%;
+  display: block;
+}
+
+@mixin buildVariant($color, $variant) {
+  .#{$variant} {
+    border: 2px solid $color;
+    background-color: $color;
+    color: #fff;
+    &:hover {
+      color: $color;
+      background-color: #fff;
+    }
+  }
+  .block-#{$variant} {
+    @extend .#{$variant};
+    @extend .block;
+  }
+  .outline-#{$variant} {
+    border: 2px solid $color;
+    background-color: #fff;
+    color: $color;
+    &:hover {
+      color: #fff;
+      background-color: $color;
+    }
+  }
+  .block-outline-#{$variant} {
+    @extend .outline-#{$variant};
+    @extend .block;
+  }
+}
+@include buildVariant($primary, 'primary');
+@include buildVariant($second, 'second');
+
+.loader {
+  margin: 0 auto;
+  border: 2px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 2px solid #3498db;
+  width: 24px;
+  height: 24px;
+  animation: spin 1.5s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
