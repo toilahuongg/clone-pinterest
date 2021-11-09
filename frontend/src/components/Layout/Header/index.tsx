@@ -1,23 +1,27 @@
 import { observer } from 'mobx-react';
+import { applySnapshot } from 'mobx-state-tree';
 import React, { useState } from 'react';
 import { FaUser } from 'react-icons/fa';
 import { FiSearch } from 'react-icons/fi';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import Login from 'src/components/Login';
 import Register from 'src/components/Register';
-import useAuth from 'src/hooks/useAuth';
+import useUsers from 'src/hooks/useUsers';
 
 import Modal from '../Modal';
 import styles from './header.module.scss';
 
 const Header: React.FC = () => {
-  const { isAuth, setToken } = useAuth();
-
+  const { detailUser: user, auth } = useUsers();
+  const { isAuth, setToken } = auth;
   const [modalRegisterActive, setModalRegisterActive] = useState<boolean>(false);
   const toggleModalRegisterActive = () => setModalRegisterActive(!modalRegisterActive);
 
   const [modalLoginActive, setModalLoginActive] = useState<boolean>(false);
-  const toggleModalLoginActive = () => setModalLoginActive(!modalLoginActive);
+  const toggleModalLoginActive = () => {
+    applySnapshot(user, {});
+    setModalLoginActive(!modalLoginActive);
+  };
 
   const handleLogout = () => {
     setToken('');
@@ -48,6 +52,10 @@ const Header: React.FC = () => {
             <ul>
               {isAuth ? (
                 <>
+                  <li className={styles.main}> {user.fullname} </li>
+                  <li>
+                    <Link to="/profile"> Trang cá nhân </Link>
+                  </li>
                   <li onClick={handleLogout} role="presentation">
                     Đăng xuất
                   </li>

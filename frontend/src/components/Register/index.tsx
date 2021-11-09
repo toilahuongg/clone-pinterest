@@ -4,8 +4,7 @@ import { applySnapshot, getSnapshot } from 'mobx-state-tree';
 import React, { FormEvent } from 'react';
 import { toast } from 'react-toastify';
 import instance from 'src/helpers/instance';
-import useAuth from 'src/hooks/useAuth';
-import useUser from 'src/hooks/useUser';
+import useUsers from 'src/hooks/useUsers';
 
 import Button from '../Layout/Button';
 import Form from '../Layout/Form';
@@ -15,8 +14,8 @@ type TProps = {
   openLogin: () => void;
 };
 const Register: React.FC<TProps> = ({ onClose, openLogin }) => {
-  const { setToken } = useAuth();
-  const user = useUser();
+  const { detailUser: user, auth } = useUsers();
+  const { setToken } = auth;
   const {
     username,
     fullname,

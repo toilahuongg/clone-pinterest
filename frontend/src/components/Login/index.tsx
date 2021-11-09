@@ -5,8 +5,7 @@ import React, { FormEvent } from 'react';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import instance from 'src/helpers/instance';
-import useAuth from 'src/hooks/useAuth';
-import useUser from 'src/hooks/useUser';
+import useUsers from 'src/hooks/useUsers';
 
 import Button from '../Layout/Button';
 import Form from '../Layout/Form';
@@ -17,8 +16,8 @@ type TProps = {
 };
 const Login: React.FC<TProps> = ({ onClose, openRegister }) => {
   const history = useHistory();
-  const user = useUser();
-  const { setToken } = useAuth();
+  const { detailUser: user, auth } = useUsers();
+  const { setToken } = auth;
   // eslint-disable-next-line object-curly-newline
   const { loading, username, password, setLoading, setUsername, setPassword } = user;
 
@@ -27,8 +26,10 @@ const Login: React.FC<TProps> = ({ onClose, openRegister }) => {
       e.preventDefault();
       setLoading(true);
       const response = await instance.post('/user/login', getSnapshot(user));
-      setToken(response.data.token);
       onClose();
+      applySnapshot(user, response.data);
+      console.log(response.data);
+      setToken(response.data.token);
       history.push('/profile');
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -42,7 +43,6 @@ const Login: React.FC<TProps> = ({ onClose, openRegister }) => {
   };
 
   const handleOpenRegister = () => {
-    applySnapshot(user, {});
     onClose();
     openRegister();
   };

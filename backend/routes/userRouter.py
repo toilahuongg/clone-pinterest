@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
-from flask import Blueprint, json, Response, request, jsonify
+from flask import Blueprint, json, request, jsonify
 import re, bcrypt, jwt, os
-from models import User, Role, AlchemyEncoder, db
+from models import User, Role, db
 from middlewares import Auth
 
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
@@ -55,7 +55,7 @@ def register():
     db.session.add(user)
     db.session.commit()
 
-    return Response(json.dumps(user, cls=AlchemyEncoder), mimetype='application/json', status=200)
+    return jsonify(user),200
   except NameError:
     return jsonify({'error': 'Đã xảy ra lỗi'}), 400
 
@@ -80,8 +80,9 @@ def login():
       'fullname': user.fullname,
       'exp' : datetime.utcnow() + timedelta(minutes = 30)
     }, os.getenv('SECRET_KEY'))
-    
-    return jsonify({'token': token}), 200
+    result = json.loads(json.dumps(user))
+    result['token'] = token
+    return jsonify(result), 200
   except NameError:
     return jsonify({'error': 'Đã xảy ra lỗi'}), 400
 
@@ -93,3 +94,38 @@ def checkUser():
   user = User.query.filter_by(id=request.userId).first()
   print(user)
   return str(request.userId)
+
+
+@userRouter.route('/info', methods=['GET'])
+@Auth
+def getUser():
+  user = User.query.filter_by(id=request.userId).first()
+  if (not user): return jsonify({ 'error' : 'Tài khoản này không tồn tại' })
+  result = {
+    'id': user.id,
+    'username': user.username,
+    'fullname': user.fullname,
+    'email': user.email,
+    'role_id': user.role_id,
+    'gender': user.gender,
+    'introduce': user.introduce,
+    'avatar': user.avatar,
+    'cover': user.cover,
+  }
+  return result
+
+
+@userRouter.route('/<username>', methods=['GET'])
+def getUserByUsername(username):
+  user = User.query.filter_by(username=username).first()
+  if (not user): return jsonify({ 'error' : 'Tài khoản này không tồn tại' })
+  result = {
+    'id': user.id,
+    'username': user.username,
+    'fullname': user.fullname,
+    'gender': user.gender,
+    'introduce': user.introduce,
+    'avatar': user.avatar,
+    'cover': user.cover,
+  }
+  return jsonify(result)

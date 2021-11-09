@@ -5,9 +5,10 @@ from flask_cors import CORS
 import os
 from routes.userRouter import userRouter
 from routes.collectionRouter import collectionRouter
+from routes.roleRouter import roleRouter
 from models import User, db, Role
 
-app = Flask(__name__)
+app = Flask(__name__,static_url_path='', static_folder='static', template_folder='templates')
 CORS(app)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DATABASE_URI')
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
@@ -18,6 +19,7 @@ db.init_app(app)
 
 app.register_blueprint(userRouter, url_prefix='/api/user')
 app.register_blueprint(collectionRouter, url_prefix='/api/collection')
+app.register_blueprint(roleRouter, url_prefix='/api/role')
 @app.route("/")
 def hello_world():
     return render_template("index.html")

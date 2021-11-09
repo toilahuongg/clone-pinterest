@@ -1,21 +1,47 @@
-from flask import json
+from dataclasses import dataclass
+from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.ext.declarative import DeclarativeMeta
 db = SQLAlchemy()
+
+IGNORE_FIELD = ['password', 'query', 'query_class', 'registry']
+@dataclass
 class User(db.Model):
   __tablename__ = 'users'
+  id: int
+  username: str
+  password: str
+  fullname: str
+  email: str
+  gender: str
+  introduce: str
+  avatar: str
+  cover: str
+  role_id: int
+  createdAt: datetime
+  updatedAt: datetime
+
   id = db.Column(db.Integer, primary_key=True, autoincrement=True)
   username = db.Column(db.String(100), unique=True, nullable=False)
   password = db.Column(db.String(100), nullable=False)
   fullname = db.Column(db.String(100), nullable=False)
   email = db.Column(db.String(100), unique=True, nullable=False)
   gender = db.Column(db.String(100), nullable=False)
+  introduce = db.Column(db.String(), nullable=True)
+  avatar = db.Column(db.String(), nullable=True)
+  cover = db.Column(db.String(), nullable=True)
   role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=False)
   collections = db.relationship('Collection', backref='user', lazy=True)  
   createdAt = db.Column(db.DateTime, default=db.func.now())
   updatedAt = db.Column(db.DateTime, default=db.func.now(), server_onupdate=db.func.now())
+@dataclass
 class Role(db.Model):
   __tablename__ = 'roles'
+  id: int
+  name: str
+  value: str
+  createdAt: datetime
+  updatedAt: datetime
+
   id = db.Column(db.Integer, primary_key=True, autoincrement=True)
   name = db.Column(db.String(100), unique=True)
   value = db.Column(db.String(100), unique=True)
@@ -25,6 +51,14 @@ class Role(db.Model):
 
 class Collection(db.Model):
   __tablename__ = 'collections'
+  id: int
+  title: str
+  description: str
+  user_id: int
+  isPublish: int
+  createdAt: datetime
+  updatedAt: datetime
+
   id = db.Column(db.Integer, primary_key=True, autoincrement=True)
   title = db.Column(db.String(100), unique=True, nullable=False)
   description = db.Column(db.String(100))
@@ -32,18 +66,3 @@ class Collection(db.Model):
   isPublish = db.Column(db.Boolean, default=True)
   createdAt = db.Column(db.DateTime, default=db.func.now())
   updatedAt = db.Column(db.DateTime, default=db.func.now(), server_onupdate=db.func.now())
-class AlchemyEncoder(json.JSONEncoder):
-  def default(self, obj):
-    if isinstance(obj.__class__, DeclarativeMeta):
-      # an SQLAlchemy class
-      fields = {}
-      for field in [x for x in dir(obj) if not x.startswith('_') and x != 'metadata']:
-          data = obj.__getattribute__(field)
-          try:
-              json.dumps(data)
-              fields[field] = data
-          except TypeError:
-              fields[field] = None
-      # a json-encodable dict
-      return fields
-    return json.JSONEncoder.default(self, obj)
