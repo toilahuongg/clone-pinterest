@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from flask import Blueprint, json, request, jsonify
 import re, bcrypt, jwt, os
+from helpers.files import removeFile, uploadFile
 from models import User, Role, db
 from middlewares import Auth
 
@@ -100,7 +101,7 @@ def checkUser():
 @Auth
 def getUser():
   user = User.query.filter_by(id=request.userId).first()
-  if (not user): return jsonify({ 'error' : 'Tài khoản này không tồn tại' })
+  if (not user): return jsonify({ 'error' : 'Tài khoản này không tồn tại' }), 400
   result = {
     'id': user.id,
     'username': user.username,
@@ -114,6 +115,56 @@ def getUser():
   }
   return result
 
+@userRouter.route('/update-infomation', methods=['PUT'])
+@Auth
+def updateInfomation():
+  fullname = request.form.get('fullname', '')
+  introduce = request.form.get('introduce', '')
+  gender = request.form.get('gender', '')
+  
+  user = User.query.filter_by(id=request.userId).first()
+  if (not user): return jsonify({ 'error' : 'Tài khoản này không tồn tại' }), 401
+  if (not fullname): return jsonify({ 'error' : 'Fullname không được để trống' }), 400
+  fileAvatar = request.files.get('avatar', '')
+  if(fileAvatar): removeFile(user.avatar)
+  avatar = uploadFile(fileAvatar)
+  
+  fileCover = request.files.get('cover', '')
+  if(fileCover): removeFile(user.cover)
+  cover = uploadFile(fileCover)
+  newData = dict(
+    fullname = fullname,
+    introduce =  introduce,
+    gender = gender
+  )
+  if (cover):  newData['cover'] = cover
+  if (avatar):  newData['avatar'] = avatar
+  User.query.filter_by(id=request.userId).update(newData)
+  
+  db.session.commit()
+  return jsonify({ 'avatar': avatar, 'cover': cover }),200
+
+@userRouter.route('/change-password', methods=['PUT'])
+@Auth
+def changePassword():
+  oldPassword = request.json.get('oldPassword', '')
+  newPassword = request.json.get('newPassword', '')
+  confirmPassword = request.json.get('confirmPassword', '')
+  print(oldPassword, newPassword, confirmPassword)
+  
+  user = User.query.filter_by(id=request.userId).first()
+  if (not user): return jsonify({ 'error' : 'Tài khoản này không tồn tại' }), 401
+  if not bcrypt.checkpw(oldPassword.encode('utf-8'), user.password.encode('utf-8')): return jsonify({'error': 'Mật khẩu không chính xác'}), 400
+  if (not newPassword): return jsonify({ 'error' : 'Mật khẩu mới không được để trống' }), 400
+  if len(newPassword) < 8: return jsonify({'error': 'Mật khẩu phải lớn hơn hoặc bằng 8 ký tự'}), 400
+  if newPassword != confirmPassword: return jsonify({'error': 'Mật khẩu không khớp'}), 400
+  
+  hashed = bcrypt.hashpw(newPassword.encode('utf-8'), bcrypt.gensalt())
+  User.query.filter_by(id=request.userId).update(dict(
+    password=hashed.decode('utf-8')
+  ))
+  db.session.commit()
+  return jsonify({'success': 'Cập nhật thành công'}), 200
 
 @userRouter.route('/<username>', methods=['GET'])
 def getUserByUsername(username):

@@ -84,7 +84,12 @@
     align-items: center;
     cursor: pointer;
     img {
-      width: 24px;
+      height: 42px;
+      width: 42px;
+      min-height: 42px;
+      min-width: 42px;
+      object-fit: cover;
+      border-radius: 50%;
     }
   }
   .menu {

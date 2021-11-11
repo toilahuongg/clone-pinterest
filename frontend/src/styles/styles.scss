@@ -24,3 +24,24 @@ body {
 .form-350 {
   max-width: 350px;
 }
+
+.loader {
+  margin: 0 auto;
+  border: 2px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 2px solid #3498db;
+  animation: spin 1.5s linear infinite;
+  &, &.size-sm {
+    width: 24px;
+    height: 24px;
+  }
+  &.size-lg {
+    width: 48px;
+    height: 48px;
+    border-width: 5px;
+  }
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

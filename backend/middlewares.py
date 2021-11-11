@@ -6,7 +6,6 @@ def Auth(func):
   def checkToken(*args, **kwargs):
     try:
       token = request.headers['authorization']
-      print(token)
       data = jwt.decode(token, os.getenv('SECRET_KEY'),  algorithms=["HS256"])
       request.userId = data.get('id')
       return func(*args, **kwargs)

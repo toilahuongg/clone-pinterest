@@ -6,14 +6,15 @@ import { FiSearch } from 'react-icons/fi';
 import { Link, NavLink } from 'react-router-dom';
 import Login from 'src/components/Login';
 import Register from 'src/components/Register';
+import useAuth from 'src/hooks/useAuth';
 import useUsers from 'src/hooks/useUsers';
 
 import Modal from '../Modal';
 import styles from './header.module.scss';
 
 const Header: React.FC = () => {
-  const { detailUser: user, auth } = useUsers();
-  const { isAuth, setToken } = auth;
+  const { isAuth, removeToken } = useAuth();
+  const { detailUser: user } = useUsers();
   const [modalRegisterActive, setModalRegisterActive] = useState<boolean>(false);
   const toggleModalRegisterActive = () => setModalRegisterActive(!modalRegisterActive);
 
@@ -23,8 +24,8 @@ const Header: React.FC = () => {
     setModalLoginActive(!modalLoginActive);
   };
 
-  const handleLogout = () => {
-    setToken('');
+  const handleLogout = async () => {
+    removeToken();
     window.location.href = '/';
   };
   return (
@@ -36,7 +37,7 @@ const Header: React.FC = () => {
           </NavLink>
         </li>
         <li className={styles.home}>
-          <NavLink to="/playground">Trang chủ</NavLink>
+          <NavLink to="/">Trang chủ</NavLink>
         </li>
         <li className={styles.search}>
           <input type="text" placeholder="Tìm kiếm" />
@@ -46,7 +47,11 @@ const Header: React.FC = () => {
         </li>
         <li className={styles.user}>
           <div className={styles.avatar}>
-            <FaUser size="24" color="rgb(108 108 108)" />
+            {user?.avatar ? (
+              <img src={`http://localhost:5000/uploads/${user?.avatar}`} alt="avatar" />
+            ) : (
+              <FaUser size="24" color="rgb(108 108 108)" />
+            )}
           </div>
           <div className={styles.menu}>
             <ul>

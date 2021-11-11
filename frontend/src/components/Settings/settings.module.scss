@@ -1,0 +1,40 @@
+.settings {
+  display: flex;
+  margin: 30px 0;
+}
+.tabDirection {
+  max-width: 300px;
+  width: 300px;
+  ul {
+    max-width: 200px;
+    width: 200px;
+    li {
+      font-weight: 500;
+      padding: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      &:hover {
+        background-color: #ddd;
+      }
+    }
+  }
+}
+.mainTab {
+  flex: 1;
+  padding: 10px;
+  .form480 {
+    max-width: 480px;
+    width: 480px;
+  }
+}
+.title {
+  font-size: 32px;
+  font-weight: bolder;
+  margin-bottom: 20px;
+}
+.showImage {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}

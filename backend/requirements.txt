@@ -13,10 +13,13 @@ idna==3.2
 itsdangerous==2.0.1
 Jinja2==3.0.1
 MarkupSafe==2.0.1
+Pillow==8.4.0
 pycparser==2.20
 PyJWT==2.1.0
 python-dotenv==0.19.0
 six==1.16.0
 SQLAlchemy==1.4.25
 Werkzeug==2.0.1
+WTForms==2.3.3
+.0.1
 WTForms==2.3.3

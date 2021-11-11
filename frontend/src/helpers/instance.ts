@@ -12,7 +12,7 @@ instance.interceptors.response.use(
       window.localStorage.removeItem('token');
       window.location.href = '/';
     }
-    return error;
+    return Promise.reject(error);
   },
 );
 export default instance;

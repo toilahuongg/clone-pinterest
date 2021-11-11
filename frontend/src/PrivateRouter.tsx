@@ -1,9 +1,9 @@
 import { Route, RouteProps, Redirect } from 'react-router-dom';
 
-import useUsers from './hooks/useUsers';
+import useAuth from './hooks/useAuth';
 
 const PrivateRouter: React.FC<RouteProps> = (props) => {
-  const { auth } = useUsers();
-  return auth.isAuth ? <Route {...props} /> : <Redirect to="/" />;
+  const { isAuth } = useAuth();
+  return isAuth ? <Route {...props} /> : <Redirect to="/" />;
 };
 export default PrivateRouter;

@@ -3,6 +3,7 @@ import React from 'react';
 import styles from './button.module.scss';
 
 type TVariant =
+  | 'link'
   | 'primary'
   | 'block-primary'
   | 'outline-primary'
@@ -25,7 +26,7 @@ const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement> & { variant
       {...props}
       disabled={loading}
     >
-      {loading ? <div className={styles.loader} /> : children}
+      {loading ? <div className="loader size-sm" /> : children}
     </button>
   );
 };

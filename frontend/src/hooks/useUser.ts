@@ -16,6 +16,7 @@ const useUser = (username: string) => {
   useEffect(() => {
     const run = async () => {
       try {
+        console.log(window.localStorage.getItem('token'));
         setLoading(true);
         const response = await instance.get(`/user/${username}`);
         setData(response.data as TUser);

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { observer } from 'mobx-react';
-import { applySnapshot, getSnapshot } from 'mobx-state-tree';
-import React, { FormEvent } from 'react';
+import { applySnapshot } from 'mobx-state-tree';
+import React, { FormEvent, useState } from 'react';
 import { toast } from 'react-toastify';
 import instance from 'src/helpers/instance';
 import useUsers from 'src/hooks/useUsers';
@@ -14,31 +14,25 @@ type TProps = {
   openLogin: () => void;
 };
 const Register: React.FC<TProps> = ({ onClose, openLogin }) => {
-  const { detailUser: user, auth } = useUsers();
-  const { setToken } = auth;
-  const {
-    username,
-    fullname,
-    email,
-    gender,
-    password,
-    confirm,
-    loading,
-    setUsername,
-    setFullname,
-    setEmail,
-    setGender,
-    setPassword,
-    setConfirm,
-    setLoading,
-  } = user;
+  const { detailUser: user } = useUsers();
+  const [password, setPassword] = useState<string>('');
+  const [confirm, setConfirm] = useState<string>('');
+  // eslint-disable-next-line object-curly-newline
+  const { username, fullname, email, gender, loading, setUsername, setFullname, setEmail, setGender, setLoading } =
+    user;
 
   const handleSubmit = async (e: FormEvent) => {
     try {
       e.preventDefault();
       setLoading(true);
-      const response = await instance.post('/user/register', getSnapshot(user));
-      setToken(response.data.token);
+      await instance.post('/user/register', {
+        username,
+        fullname,
+        email,
+        gender,
+        password,
+        confirm,
+      });
       onClose();
       toast.success('Tạo tài khoản thành công!');
     } catch (error) {

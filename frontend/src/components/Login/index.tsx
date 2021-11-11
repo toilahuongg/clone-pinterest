@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { observer } from 'mobx-react';
-import { applySnapshot, getSnapshot } from 'mobx-state-tree';
-import React, { FormEvent } from 'react';
-import { useHistory } from 'react-router-dom';
+import { applySnapshot } from 'mobx-state-tree';
+import React, { FormEvent, useState } from 'react';
 import { toast } from 'react-toastify';
 import instance from 'src/helpers/instance';
+import useAuth from 'src/hooks/useAuth';
 import useUsers from 'src/hooks/useUsers';
 
 import Button from '../Layout/Button';
@@ -15,22 +15,24 @@ type TProps = {
   openRegister: () => void;
 };
 const Login: React.FC<TProps> = ({ onClose, openRegister }) => {
-  const history = useHistory();
-  const { detailUser: user, auth } = useUsers();
-  const { setToken } = auth;
+  const { setToken } = useAuth();
+  const { detailUser: user } = useUsers();
+  const [password, setPassword] = useState<string>('');
   // eslint-disable-next-line object-curly-newline
-  const { loading, username, password, setLoading, setUsername, setPassword } = user;
+  const { loading, username, setLoading, setUsername } = user;
 
   const handleSubmit = async (e: FormEvent) => {
     try {
       e.preventDefault();
       setLoading(true);
-      const response = await instance.post('/user/login', getSnapshot(user));
+      const response = await instance.post('/user/login', {
+        username,
+        password,
+      });
       onClose();
       applySnapshot(user, response.data);
-      console.log(response.data);
       setToken(response.data.token);
-      history.push('/profile');
+      window.location.href = '/profile';
     } catch (error) {
       if (axios.isAxiosError(error)) {
         toast.error(error.response?.data.error);
