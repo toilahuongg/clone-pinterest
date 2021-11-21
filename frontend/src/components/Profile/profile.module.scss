@@ -4,6 +4,7 @@
   height: 300px;
   background-color: #ddd;
   background-position: center center;
+  background-size: cover;
   border-radius: 20px;
   margin: 0 auto;
   position: relative;
@@ -61,5 +62,22 @@
 @media (max-width: 575px) {
   .cover {
     height: 180px;
+  }
+}
+.actions {
+  position: fixed;
+  right: 20px;
+  bottom: 100px;
+  .btnDropdown {
+    width: 48px;
+    height: 48px;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba($color: #000000, $alpha: 0.2);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
   }
 }

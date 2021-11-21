@@ -1,0 +1,147 @@
+.formCheckbox {
+  input + label {
+    color: #000;
+    font-weight: bolder;
+  }
+}
+
+.listCollection {
+  display: grid;
+  grid-template-columns: repeat(6, calc(100% / 6));
+  @media (max-width: 375px) {
+    grid-template-columns: 100%;  
+  }
+  @media (max-width: 575px) {
+    grid-template-columns: repeat(2, 50%);  
+  }
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(3, calc(100% / 3));  
+  }
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(4, 25%);  
+  }
+  @media (max-width: 1190px) {
+    grid-template-columns: repeat(5, 20%);  
+  }
+  .item {
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 10px;
+    &:hover .actions {
+      visibility: visible;
+    }
+  }
+  .thumbnail {
+    width: 100%;
+    height: 160px;
+    background-color: #ddd;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  .title {
+    font-weight: bolder;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;  
+    line-height: 35px;
+    height: 35px;
+    overflow: hidden;
+    font-size: 20px;
+    a { 
+      color: #000;
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+  .actions {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    visibility: hidden;
+    display: flex;
+    gap: 5px;
+    .btnAction {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      padding: 0;
+      margin: 0;
+    }
+    .btnEdit {
+      @extend .btnAction;
+      background-color: #fff;
+      &:hover {
+          background-color: #eee;
+      }
+    }
+    .btnDelete {
+      @extend .btnAction;
+      background-color: rgb(216, 16, 16);
+      &:hover {
+          background-color: rgb(162, 4, 4);
+      }
+    }
+  }
+
+
+}
+.collection {
+  .header {
+    display: flex;
+    align-items: center;
+    flex-flow: column;
+    margin-bottom: 20px;
+    .title {
+      font-weight: bolder;
+      font-size: 32px;
+    }
+    .avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      overflow: hidden;
+      background-color: #ddd;
+      margin: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+    .fullname {
+      font-weight: 500;
+    }
+  }
+  .actions {
+    position: fixed;
+    right: 20px;
+    bottom: 100px;
+    .btnDropdown {
+      width: 48px;
+      height: 48px;
+      background-color: #fff;
+      box-shadow: 0 0 5px rgba($color: #000000, $alpha: 0.2);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0;
+      margin: 0;
+    }
+  }
+}
+

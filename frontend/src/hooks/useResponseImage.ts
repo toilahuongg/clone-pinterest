@@ -1,11 +1,12 @@
 import { useMemo } from 'react';
+import { IPinModelOut } from 'src/stores/pin';
 
 import { BREAKPOINTS, MARGIN } from '../contants';
-import { TImage } from '../types/image.type';
 
-const useResponseImage = (data: TImage[], screenWidth: number) => {
+export type TResponseImage = IPinModelOut & { top: number; left: number };
+const useResponseImage = (data: IPinModelOut[], screenWidth: number) => {
   return useMemo(() => {
-    const images = [...data];
+    const images = JSON.parse(JSON.stringify(data)) as TResponseImage[];
     const breakpoint = BREAKPOINTS.find((item) => screenWidth >= item.width);
     if (breakpoint && images.length > 0) {
       const w = (screenWidth - (breakpoint.items - 1) * MARGIN) / breakpoint.items;
@@ -22,7 +23,7 @@ const useResponseImage = (data: TImage[], screenWidth: number) => {
           images[j].height = height;
           images[j].left = images[i].left;
           const top = (images[j - breakpoint.items].top || 0) + images[j - breakpoint.items].height;
-          images[j].top = top + MARGIN;
+          images[j].top = top + MARGIN + 20;
         }
       }
       return images;

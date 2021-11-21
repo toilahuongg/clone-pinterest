@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { FormEvent, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import instance from 'src/helpers/instance';
-import useUsers from 'src/hooks/useUsers';
+import useStore from 'src/stores';
 
 import Button from '../Layout/Button';
 import Form from '../Layout/Form';
@@ -13,7 +13,8 @@ const SettingInfomation = () => {
   const [isLoading, setLoading] = useState<boolean>(false);
   const [fileAvatar, setFileAvatar] = useState<File | null>();
   const [fileCover, setFileCover] = useState<File | null>();
-  const { detailUser } = useUsers();
+  const { userModel } = useStore();
+  const { detailUser } = userModel;
   // eslint-disable-next-line object-curly-newline
   const { fullname, introduce, gender, avatar, cover, setFullname, setIntroduce, setGender, setAvatar, setCover } =
     detailUser;
@@ -94,7 +95,11 @@ const SettingInfomation = () => {
       />
       {cAvatar && (
         <img
-          src={cAvatar.includes('blob') ? cAvatar : `http://localhost:5000/uploads/${cAvatar}`}
+          src={
+            cAvatar.includes('blob')
+              ? cAvatar
+              : `${process.env.REACT_APP_SERVER}/${process.env.REACT_APP_FOLDER_IMAGE}/${cAvatar}`
+          }
           className={styles.showImage}
           alt=""
         />
@@ -114,7 +119,11 @@ const SettingInfomation = () => {
       />
       {cCover && (
         <img
-          src={cCover.includes('blob') ? cCover : `http://localhost:5000/uploads/${cCover}`}
+          src={
+            cCover.includes('blob')
+              ? cCover
+              : `${process.env.REACT_APP_SERVER}/${process.env.REACT_APP_FOLDER_IMAGE}/${cCover}`
+          }
           className={styles.showImage}
           alt=""
         />

@@ -1,44 +1,27 @@
-import axios from 'axios';
-import { useEffect, useRef, useState } from 'react';
-import ImageItem from 'src/components/Image/ImageItem';
-import useResponseImage from 'src/hooks/useResponseImage';
-import { TImage } from 'src/types/image.type';
+import { observer } from 'mobx-react';
+import { applySnapshot, getSnapshot } from 'mobx-state-tree';
+import { useEffect } from 'react';
+import GridImage from 'src/components/GridImage';
+import instance from 'src/helpers/instance';
+import { usePins } from 'src/stores/pin';
 
 const Home = () => {
-  const [data, setData] = useState<TImage[]>([]);
-  const [screenWidth, setScreenWidth] = useState<number>(0);
-  const listRef = useRef<HTMLDivElement>(null);
+  const { listPin, isLoading, setLoading } = usePins();
   useEffect(() => {
+    document.title = 'Clone Pinterest';
     const run = async () => {
-      const response = await axios.get('https://picsum.photos/v2/list?limit=6');
-      setData(response.data);
+      setLoading(true);
+      const response = await instance.get('/pin');
+      applySnapshot(listPin, response.data);
+      setLoading(false);
     };
     run();
   }, []);
-
-  const getWidth = () => {
-    if (listRef.current) {
-      const clientWidth = listRef.current.getBoundingClientRect().width;
-      return clientWidth;
-    }
-    return 0;
-  };
-  useEffect(() => {
-    setScreenWidth(getWidth());
-    window.addEventListener('resize', () => {
-      setScreenWidth(getWidth());
-    });
-    return window.removeEventListener('resize', () => {});
-  }, [data, listRef]);
-
-  const listItem = useResponseImage(data, screenWidth);
-  return (
-    <div ref={listRef} className="list-image">
-      {listItem.map((image) => (
-        <ImageItem key={image.id} item={image} />
-      ))}
-    </div>
+  return isLoading ? (
+    <div className="loader size-lg" />
+  ) : (
+    <GridImage items={getSnapshot(listPin)} isShowAction={false} />
   );
 };
 
-export default Home;
+export default observer(Home);

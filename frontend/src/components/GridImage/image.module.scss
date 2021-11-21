@@ -1,0 +1,93 @@
+.gridImage {
+  position: relative;
+  width: 100%;
+  .item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    .title {
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;  
+      line-height: 20px;
+      height: 20px;
+      padding: 0 5px;
+      overflow: hidden;
+      font-size: 14px;
+      font-weight: bolder;
+      a {
+        color: #000;
+        text-decoration: none;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+    .featuredImage {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      background-color: #ddd;
+      &:hover .actions, &:hover .save {
+        visibility: visible;
+      }
+      .title {
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;  
+        line-height: 35px;
+        height: 35px;
+        overflow: hidden;
+      }
+    }
+    .btnAction {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      padding: 0;
+      margin: 0;
+    }
+    .save {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      visibility: hidden;
+      .btnSave {
+        @extend .btnAction;
+        background-color: rgb(255, 255, 255);
+        &:hover {
+            background-color: rgb(233, 21, 21);
+            svg {
+              fill: #fff;
+            }
+        }
+      }
+    }
+    .actions {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      visibility: hidden;
+      display: flex;
+      gap: 5px;
+      
+      .btnEdit {
+        @extend .btnAction;
+        background-color: #fff;
+        &:hover {
+            background-color: #eee;
+        }
+      }
+      .btnDelete {
+        @extend .btnAction;
+        background-color: rgb(216, 16, 16);
+        &:hover {
+            background-color: rgb(162, 4, 4);
+        }
+      }
+    }
+  }
+}

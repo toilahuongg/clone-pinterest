@@ -5,8 +5,9 @@ import styles from './modal.module.scss';
 
 type TProps = {
   isShow: boolean;
-  onClose: () => void;
+  size?: 'sm' | 'md' | 'lg';
   children: React.ReactNode | React.ReactNode[] | string | string[];
+  onClose: () => void;
 };
 const Header: React.FC<TProps['children']> = ({ children }) => {
   return <div className={styles.header}> {children} </div>;
@@ -14,11 +15,14 @@ const Header: React.FC<TProps['children']> = ({ children }) => {
 const Body: React.FC<TProps['children']> = ({ children }) => {
   return <div className={styles.body}> {children} </div>;
 };
+const Footer: React.FC<TProps['children'] & { align: 'left' | 'center' | 'right' }> = ({ align, children }) => {
+  return <div className={`${styles.footer} ${styles[align]}`}> {children} </div>;
+};
 
-const Modal: React.FC<TProps> = ({ isShow, onClose, children }) => {
+const Modal: React.FC<TProps> = ({ isShow, size, children, onClose }) => {
   return (
-    <div className={styles.modal + (isShow ? ` ${styles.show}` : '')} onClick={() => onClose()}>
-      <div className={styles.content} onClick={(e) => e.stopPropagation()}>
+    <div className={`${styles.modal} ${isShow ? `${styles.show}` : ''}`} onMouseDown={() => onClose()}>
+      <div className={`${styles.content}  ${styles[size || 'sm']}`} onMouseDown={(e) => e.stopPropagation()}>
         <button type="button" className={styles.btnClose} onClick={() => onClose()}>
           <CgClose size="30" />
         </button>
@@ -27,5 +31,5 @@ const Modal: React.FC<TProps> = ({ isShow, onClose, children }) => {
     </div>
   );
 };
-
-export default Object.assign(Modal, { Header, Body });
+Modal.defaultProps = { size: 'sm' };
+export default Object.assign(Modal, { Header, Body, Footer });

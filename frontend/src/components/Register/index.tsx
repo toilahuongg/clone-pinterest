@@ -4,7 +4,7 @@ import { applySnapshot } from 'mobx-state-tree';
 import React, { FormEvent, useState } from 'react';
 import { toast } from 'react-toastify';
 import instance from 'src/helpers/instance';
-import useUsers from 'src/hooks/useUsers';
+import { useUsers } from 'src/stores/user';
 
 import Button from '../Layout/Button';
 import Form from '../Layout/Form';
@@ -18,7 +18,7 @@ const Register: React.FC<TProps> = ({ onClose, openLogin }) => {
   const [password, setPassword] = useState<string>('');
   const [confirm, setConfirm] = useState<string>('');
   // eslint-disable-next-line object-curly-newline
-  const { username, fullname, email, gender, loading, setUsername, setFullname, setEmail, setGender, setLoading } =
+  const { username, fullname, email, gender, isLoading, setUsername, setFullname, setEmail, setGender, setLoading } =
     user;
 
   const handleSubmit = async (e: FormEvent) => {
@@ -75,7 +75,7 @@ const Register: React.FC<TProps> = ({ onClose, openLogin }) => {
         onChange={(e) => setConfirm(e.target.value)}
         placeholder="******"
       />
-      <Button type="submit" variant="block-primary" loading={loading}>
+      <Button type="submit" variant="block-primary" loading={isLoading}>
         Đăng Ký
       </Button>
       <Button type="button" variant="block-outline-second" onClick={() => handleOpenLogin()}>

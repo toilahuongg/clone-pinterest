@@ -5,7 +5,7 @@ import React, { FormEvent, useState } from 'react';
 import { toast } from 'react-toastify';
 import instance from 'src/helpers/instance';
 import useAuth from 'src/hooks/useAuth';
-import useUsers from 'src/hooks/useUsers';
+import { useUsers } from 'src/stores/user';
 
 import Button from '../Layout/Button';
 import Form from '../Layout/Form';
@@ -19,7 +19,7 @@ const Login: React.FC<TProps> = ({ onClose, openRegister }) => {
   const { detailUser: user } = useUsers();
   const [password, setPassword] = useState<string>('');
   // eslint-disable-next-line object-curly-newline
-  const { loading, username, setLoading, setUsername } = user;
+  const { isLoading, username, setLoading, setUsername } = user;
 
   const handleSubmit = async (e: FormEvent) => {
     try {
@@ -58,7 +58,7 @@ const Login: React.FC<TProps> = ({ onClose, openRegister }) => {
         onChange={(e) => setPassword(e.target.value)}
         placeholder="******"
       />
-      <Button type="submit" variant="block-primary" loading={loading}>
+      <Button type="submit" variant="block-primary" loading={isLoading}>
         Đăng Nhập
       </Button>
       <Button type="button" variant="block-outline-second" onClick={() => handleOpenRegister()}>

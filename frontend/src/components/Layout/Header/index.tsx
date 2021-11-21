@@ -7,20 +7,26 @@ import { Link, NavLink } from 'react-router-dom';
 import Login from 'src/components/Login';
 import Register from 'src/components/Register';
 import useAuth from 'src/hooks/useAuth';
-import useUsers from 'src/hooks/useUsers';
+import useStore from 'src/stores';
 
+import Dropdown from '../Dropdown';
+import List from '../List';
 import Modal from '../Modal';
 import styles from './header.module.scss';
 
 const Header: React.FC = () => {
   const { isAuth, removeToken } = useAuth();
-  const { detailUser: user } = useUsers();
+  const { userModel } = useStore();
+  const { detailUser } = userModel;
+  const [isActive, setActive] = useState<boolean>(false);
+  const toggleActive = () => setActive(!isActive);
+
   const [modalRegisterActive, setModalRegisterActive] = useState<boolean>(false);
   const toggleModalRegisterActive = () => setModalRegisterActive(!modalRegisterActive);
 
   const [modalLoginActive, setModalLoginActive] = useState<boolean>(false);
   const toggleModalLoginActive = () => {
-    applySnapshot(user, {});
+    applySnapshot(detailUser, {});
     setModalLoginActive(!modalLoginActive);
   };
 
@@ -46,38 +52,50 @@ const Header: React.FC = () => {
           </span>
         </li>
         <li className={styles.user}>
-          <div className={styles.avatar}>
-            {user?.avatar ? (
-              <img src={`http://localhost:5000/uploads/${user?.avatar}`} alt="avatar" />
-            ) : (
-              <FaUser size="24" color="rgb(108 108 108)" />
-            )}
-          </div>
-          <div className={styles.menu}>
-            <ul>
+          <Dropdown
+            isShow={isActive}
+            align="bottomRight"
+            activator={
+              <div className={styles.avatar} onClick={toggleActive}>
+                {detailUser?.avatar ? (
+                  <img
+                    src={`${process.env.REACT_APP_SERVER}/${process.env.REACT_APP_FOLDER_IMAGE}/${detailUser?.avatar}`}
+                    alt="avatar"
+                  />
+                ) : (
+                  <FaUser size="24" color="rgb(108 108 108)" />
+                )}
+              </div>
+            }
+            onClose={toggleActive}
+          >
+            <List>
               {isAuth ? (
                 <>
-                  <li className={styles.main}> {user.fullname} </li>
-                  <li>
+                  <List.Item main> {detailUser.fullname} </List.Item>
+                  <List.Item>
                     <Link to="/profile"> Trang cá nhân </Link>
-                  </li>
-                  <li onClick={handleLogout} role="presentation">
+                  </List.Item>
+                  <List.Item>
+                    <Link to="/settings"> Cài đặt </Link>
+                  </List.Item>
+                  <List.Item onClick={handleLogout} role="presentation">
                     Đăng xuất
-                  </li>
+                  </List.Item>
                 </>
               ) : (
                 <>
-                  <li className={styles.main}> Bạn đã có tài khoản chưa?</li>
-                  <li onClick={() => toggleModalRegisterActive()} role="presentation">
+                  <List.Item main> Bạn đã có tài khoản chưa?</List.Item>
+                  <List.Item onClick={() => toggleModalRegisterActive()} role="presentation">
                     Đăng ký
-                  </li>
-                  <li onClick={() => toggleModalLoginActive()} role="presentation">
+                  </List.Item>
+                  <List.Item onClick={() => toggleModalLoginActive()} role="presentation">
                     Đăng nhập
-                  </li>
+                  </List.Item>
                 </>
               )}
-            </ul>
-          </div>
+            </List>
+          </Dropdown>
         </li>
       </ul>
       {!isAuth && (

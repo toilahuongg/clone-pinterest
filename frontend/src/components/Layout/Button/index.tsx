@@ -3,6 +3,7 @@ import React from 'react';
 import styles from './button.module.scss';
 
 type TVariant =
+  | 'disable'
   | 'link'
   | 'primary'
   | 'block-primary'

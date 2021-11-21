@@ -379,3 +379,50 @@ body {
     overflow-y: auto;
 }
 b { font-weight: bolder;}
+
+input[type=checkbox] + label {
+    display: block;
+    margin: 0.2em;
+    cursor: pointer;
+    padding: 0.2em;
+    font-size: 16px;
+  }
+  
+  input[type=checkbox] {
+    display: none;
+  }
+  
+  input[type=checkbox] + label:before {
+    content: "\2714";
+    border: 0.1em solid #000;
+    border-radius: 0.2em;
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    text-align: center;
+    line-height: 1em;
+    margin-right: 0.5em;
+    color: transparent;
+    transition: .2s;
+  }
+  
+  input[type=checkbox] + label:active:before {
+    transform: scale(0);
+  }
+  
+  input[type=checkbox]:checked + label:before {
+    background-color: rgb(0, 0, 0);
+    border-color: rgb(0, 0, 0);
+    color: #fff;
+  }
+  
+  input[type=checkbox]:disabled + label:before {
+    transform: scale(1);
+    border-color: rgb(0, 0, 0);
+  }
+  
+  input[type=checkbox]:checked:disabled + label:before {
+    transform: scale(1);
+    background-color: rgb(52, 52, 52);
+    border-color: rgb(52, 52, 52);
+  }

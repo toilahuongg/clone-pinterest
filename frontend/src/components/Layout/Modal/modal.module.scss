@@ -26,7 +26,7 @@
       max-width: 500px;
     }
     &.lg {
-      max-width: 500px;
+      max-width: 768px;
     }
     .btnClose {
       width: 32px;
@@ -49,10 +49,20 @@
       text-align: center;
       font-size: 25px;
       font-weight: 600;
-      border-bottom: 2px solid #ddd;
+      // border-bottom: 2px solid #ddd;
     }
     .body {
       padding: 20px;
+    }
+    .footer {
+      padding: 20px;
+      display: flex;
+      &.center {
+        justify-content: center;
+      }
+      &.right {
+        justify-content: flex-end;
+      }
     }
   }
   &.show {

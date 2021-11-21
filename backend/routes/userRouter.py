@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from flask import Blueprint, json, request, jsonify
 import re, bcrypt, jwt, os
 from helpers.files import removeFile, uploadFile
-from models import User, Role, db
+from models import User, Role, Collection, db
 from middlewares import Auth
 
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
@@ -79,7 +79,7 @@ def login():
       'id': user.id,
       'username': user.username,
       'fullname': user.fullname,
-      'exp' : datetime.utcnow() + timedelta(minutes = 30)
+      'exp' : datetime.utcnow() + timedelta(minutes = 180)
     }, os.getenv('SECRET_KEY'))
     result = json.loads(json.dumps(user))
     result['token'] = token
@@ -179,4 +179,32 @@ def getUserByUsername(username):
     'avatar': user.avatar,
     'cover': user.cover,
   }
+  return jsonify(result)
+
+@userRouter.route('/id/<userId>', methods=['GET'])
+def getUserById(userId):
+  user = User.query.filter_by(id=userId).first()
+  if (not user): return jsonify({ 'error' : 'Tài khoản này không tồn tại' })
+  result = {
+    'id': user.id,
+    'username': user.username,
+    'fullname': user.fullname,
+    'gender': user.gender,
+    'introduce': user.introduce,
+    'avatar': user.avatar,
+    'cover': user.cover,
+  }
+  return jsonify(result)
+
+
+@userRouter.route('/<userId>/collection', methods=["GET"])
+def getListCollection(userId):
+  collections = Collection.query.filter_by(user_id=userId).all()
+  result = []
+  for collection in collections:
+    dictCollection = json.loads(json.dumps(collection))
+    dictCollection['pins'] = json.loads(json.dumps(collection.pins))[0:1]
+    dictCollection['listPinIds'] = list(map(lambda item: item.id, collection.pins))
+    result.append(dictCollection)
+  
   return jsonify(result)

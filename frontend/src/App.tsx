@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -6,19 +7,27 @@ import 'react-toastify/dist/ReactToastify.css';
 import PrivateRouter from './PrivateRouter';
 import Header from './components/Layout/Header';
 import useAuth from './hooks/useAuth';
-import useUsers from './hooks/useUsers';
+import useStore from './stores';
 
 const Playground = React.lazy(() => import('./components/Playground'));
 const Profile = React.lazy(() => import('./components/Profile'));
 const Settings = React.lazy(() => import('./components/Settings'));
 const Home = React.lazy(() => import('./components/Home'));
+const Collection = React.lazy(() => import('./components/Collection/Collection'));
+const Pin = React.lazy(() => import('./components/Pin'));
 
 const App: React.FC = () => {
   const { isAuth } = useAuth();
-  const { getUser } = useUsers();
+  const { userModel, collectionModel } = useStore();
+  const { detailUser, getUser } = userModel;
   useEffect(() => {
-    if (isAuth) getUser();
+    if (isAuth) getUser('info', true);
   }, []);
+
+  useEffect(() => {
+    if (detailUser.fetched) collectionModel.getListCollection(detailUser.id);
+  }, [detailUser.fetched]);
+
   return (
     <Router>
       <Header />
@@ -30,6 +39,8 @@ const App: React.FC = () => {
             <Route exact path="/profile" component={Profile} />
             <Route exact path="/settings" component={Settings} />
             <Route path="/profile/:username" component={Profile} />
+            <Route path="/collection/:slug" component={Collection} />
+            <Route path="/pin/:slug" component={Pin} />
             <PrivateRouter path="/xyz" component={Profile} />
           </Switch>
         </React.Suspense>
@@ -39,4 +50,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default observer(App);

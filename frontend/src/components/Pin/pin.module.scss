@@ -1,0 +1,75 @@
+.grid {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  & > * {
+    padding: 0 1em;
+  }
+  @media (max-width: 575px) {
+    grid-template-columns: 1fr;
+    & > * {
+      padding: 0;
+    }
+    .uploadFile {
+      margin-bottom: 20px;
+    }
+  }
+}
+
+.uploadFile {
+  position: relative;
+  height: 350px;
+  background-color: rgb(209, 130, 55);
+  border-radius: 10px;
+  border: 5px dashed rgb(47, 47, 47);
+
+  h3 {
+    font-weight: bolder;
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    text-align: center;
+    color: rgb(201, 201, 201);
+    text-shadow: 0 0 5px rgba($color: #000000, $alpha: 0.5);
+  }
+  img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    object-fit: cover;
+    left: 0;
+    top: 0;
+  }
+  input[type=file] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    opacity: 0;
+  }
+}
+
+.wrapper {
+  max-width: 768px;
+  margin: 20px auto;
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba($color: #000000, $alpha: 0.1);
+  & > .featuredImage {
+    padding-right: 10px;
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+  & > .pin {
+    padding-left: 10px;
+  }
+}

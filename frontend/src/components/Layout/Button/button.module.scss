@@ -48,5 +48,9 @@ $second: #E02401;
     @extend .block;
   }
 }
+.disable {
+  color: rgb(115, 114, 114);
+  cursor: initial;
+}
 @include buildVariant($primary, 'primary');
 @include buildVariant($second, 'second');

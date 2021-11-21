@@ -11,7 +11,6 @@ def allowedFile(filename):
 
 def uploadFile(file):
   if file and allowedFile(file.filename):
-    print(time.time())
     filename = str(round(time.time() * 1000))+ '-' +secure_filename(file.filename)
     file.save(os.path.join(UPLOAD_FOLDER, filename))
     foo = Image.open(os.path.join(UPLOAD_FOLDER, filename))

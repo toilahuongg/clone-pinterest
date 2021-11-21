@@ -26,6 +26,9 @@
 .formText {
   font-size: 12px;
   padding: 5px;
+  &.normal {
+    color: rgb(142, 142, 142);
+  }
   &.error {
     color: red;
   }
