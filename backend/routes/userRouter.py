@@ -80,7 +80,7 @@ def login():
       'username': user.username,
       'fullname': user.fullname,
       'exp' : datetime.utcnow() + timedelta(minutes = 180)
-    }, os.getenv('SECRET_KEY'))
+    }, 'toilahuong')
     result = json.loads(json.dumps(user))
     result['token'] = token
     return jsonify(result), 200

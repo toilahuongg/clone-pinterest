@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, json, request, jsonify
 from helpers.files import removeFile, uploadFile
 from helpers.slug import slug
 from middlewares import Auth
@@ -7,8 +7,10 @@ pinRouter = Blueprint('pinRouter', __name__)
 
 @pinRouter.route('/<slug>', methods=["GET"])
 def getPinBySlug(slug):
-  pins = Pin.query.filter_by(slug=slug).first()
-  return jsonify(pins)
+  pin = Pin.query.filter_by(slug=slug).first()
+  result = json.loads(json.dumps(pin))
+  result['comments'] = list(json.loads(json.dumps(pin.comments)))[::-1]
+  return jsonify(result)
 
 @pinRouter.route('', methods=["GET"])
 def getAllPin():

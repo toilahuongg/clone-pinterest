@@ -1,6 +1,6 @@
 from flask import Blueprint, json, request, jsonify
 from middlewares import Auth
-from models import Collection, Pin, User, db
+from models import Collection, User, db
 from helpers.slug import slug
 collectionRouter = Blueprint('collectionRouter', __name__)
 
@@ -16,26 +16,22 @@ def getCollectionBySlug(slug):
 @collectionRouter.route('', methods=["POST"])
 @Auth
 def postCollection():
-  try:
-    title = request.json.get('title', '')
-    description = request.json.get('description', '')
-    isPublic = request.json.get('isPublic', False)
-    if not title: return jsonify({'error': 'title không được để trống'}), 400
-    user = User.query.filter_by(id=request.userId).first()
-    if (not user): return jsonify({ 'error' : 'Tài khoản này không tồn tại' }), 401
-    collection = Collection(
-      title=title,
-      description=description,
-      isPublic=isPublic,
-      slug=slug(title),
-      user=user
-    )
-    db.session.add(collection)
-    db.session.commit()
-    return jsonify(collection)
-  except NameError:
-    print(NameError)
-    return jsonify(NameError)
+  title = request.json.get('title', '')
+  description = request.json.get('description', '')
+  isPublic = request.json.get('isPublic', False)
+  if not title: return jsonify({'error': 'title không được để trống'}), 400
+  user = User.query.filter_by(id=request.userId).first()
+  if (not user): return jsonify({ 'error' : 'Tài khoản này không tồn tại' }), 401
+  collection = Collection(
+    title=title,
+    description=description,
+    isPublic=isPublic,
+    slug=slug(title),
+    user=user
+  )
+  db.session.add(collection)
+  db.session.commit()
+  return jsonify(collection)
 
 @collectionRouter.route('/<id>', methods=["PUT"])
 @Auth

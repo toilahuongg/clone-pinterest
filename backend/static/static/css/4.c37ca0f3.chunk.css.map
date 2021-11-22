@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack://src/components/Image/image.module.scss"],"names":[],"mappings":"AAAA,mBACE,iBAAA,CACA,KAAA,CACA,MAAA,CACA,kBAAA,CACA,eAAA,CACA,qBAAA","file":"4.c37ca0f3.chunk.css","sourcesContent":[".item {\n  position: absolute;\n  top: 0;\n  left: 0;\n  border-radius: 20px;\n  overflow: hidden;\n  background-color: #ddd;\n}"]}
