@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react';
 import { applySnapshot } from 'mobx-state-tree';
 import React from 'react';
 import { BsFillBookmarksFill } from 'react-icons/bs';
@@ -82,4 +83,4 @@ const ImageItem: React.FC<{ item: TResponseImage; isShowAction: boolean }> = ({ 
     </div>
   );
 };
-export default ImageItem;
+export default observer(ImageItem);

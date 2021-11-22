@@ -55,21 +55,140 @@
 }
 
 .wrapper {
-  max-width: 768px;
+  max-width: 1024px;
   margin: 20px auto;
   display: grid;
   grid-template-columns: 2fr 3fr;
   border-radius: 20px;
-  overflow: hidden;
   box-shadow: 0 0 10px rgba($color: #000000, $alpha: 0.1);
   & > .featuredImage {
-    padding-right: 10px;
     img {
       width: 100%;
       height: auto;
+      border-radius: 20px 0 0 20px;
+      object-fit: cover;
     }
   }
   & > .pin {
-    padding-left: 10px;
+    padding: 20px;
+    position: relative;
+    .save {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      .btnSave {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        padding: 0;
+        margin: 0;
+        background-color: rgb(255, 255, 255);
+        &:hover {
+            background-color: rgb(233, 21, 21);
+            svg {
+              fill: #fff;
+            }
+        }
+      }
+    }
+    .title {
+      padding: 20px 0;
+      font-size: 20px;
+      font-weight: 500;
+    }
+    .user {
+      display: flex;
+      align-items: center;
+      .avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-right: 10px;
+        img {
+          width: 48px;
+          height: 48px;
+          max-width: 48px;
+          max-height: 48px;
+          object-fit: cover;
+        }
+      }
+      .fullname {
+        font-weight: 500;
+        a {
+          color: #000;
+          text-decoration: none;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+
+    .content {
+      padding: 10px 0;
+      margin-bottom: 10px;
+    }
+    .formContent {
+      form {
+        display: flex;
+        gap: 10px;
+      }
+      input, button {
+        padding: 0.5em;
+        border-radius: 0.5em;
+        border: 2px solid;
+      }
+      input {
+        width: 100%;
+        border-color: rgb(216, 214, 214);
+      }
+      button {
+        color: #fff;
+        border-color: rgb(0, 199, 13);
+        background-color: rgb(0, 199, 13);
+        padding: 0 10px;
+        font-weight: bolder;
+        &:hover {
+          background-color: rgb(5, 184, 17);
+        }
+      }
+    }
+    .listComment {
+      margin-top: 10px;
+      max-height: 400px;
+      overflow-y: auto;
+      li {
+        display: flex;
+        margin-bottom: 10px;
+        .body {
+          .fullname {
+            margin-top: 5px;
+            font-weight: 500;
+          }
+          .cmtContent {
+            font-size: 14px;
+            padding: 5px 0;
+          }
+        }
+      }
+      .avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-right: 10px;
+        img {
+          width: 48px;
+          height: 48px;
+          max-width: 48px;
+          max-height: 48px;
+          object-fit: cover;
+        }
+      }
+    }
   }
 }

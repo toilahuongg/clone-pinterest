@@ -67,7 +67,6 @@ const ListPinModel = types
       self.isModalShowDeletePin = !self.isModalShowDeletePin;
     },
     toggleModalShowAddPinToCollection: () => {
-      applySnapshot(self.detailPin, {});
       self.isModalShowAddPinToCollection = !self.isModalShowAddPinToCollection;
     },
   }));

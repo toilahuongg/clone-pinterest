@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { getImage } from 'src/helpers/common';
 import instance from 'src/helpers/instance';
 import useStore from 'src/stores';
-import { useCollection } from 'src/stores/collection';
+import { useCollection, useCollections } from 'src/stores/collection';
 import { usePins } from 'src/stores/pin';
 
 import Button from '../Layout/Button';
@@ -20,7 +20,7 @@ const ModalFormPin: React.FC<{ cId?: number }> = ({ cId }) => {
   const [cImage, setCImage] = useState<string | null>(null);
   const { detailPin, isModalShowFormPin, toggleModalShowFormPin } = usePins();
   const { collectionModel } = useStore();
-  const { listCollection, isLoading, addPin, editPin } = collectionModel;
+  const { listCollection, isLoading, addPin, editPin } = useCollections();
   // eslint-disable-next-line object-curly-newline
   const { title, content, featuredImage, typeForm, setTitle, setContent } = detailPin;
   useEffect(() => {
@@ -51,13 +51,15 @@ const ModalFormPin: React.FC<{ cId?: number }> = ({ cId }) => {
       let response;
       if (typeForm === 'add') {
         response = await instance.post('/pin', formData);
-        if (!cId) addPin(parseInt(collection, 10), response.data);
-        else bst.addPin(response.data);
+        addPin(parseInt(collection, 10), response.data);
+        collectionModel.addPin(parseInt(collection, 10), response.data);
+        bst.addPin(response.data);
         toast.success('Tạo ghim thành công');
       } else {
         response = await instance.put(`/pin/${detailPin.id}`, formData);
-        if (!cId) editPin(parseInt(collection, 10), detailPin.id, response.data);
-        else bst.editPin(detailPin.id, response.data);
+        editPin(parseInt(collection, 10), detailPin.id, response.data);
+        collectionModel.editPin(parseInt(collection, 10), detailPin.id, response.data);
+        bst.editPin(detailPin.id, response.data);
         toast.success('Sửa ghim thành công');
       }
       URL.revokeObjectURL(cImage || '');

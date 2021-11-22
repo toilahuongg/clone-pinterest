@@ -2,7 +2,7 @@ import { applySnapshot, Instance, SnapshotOut, types, flow } from 'mobx-state-tr
 import { createContext, useContext } from 'react';
 import instance from 'src/helpers/instance';
 
-const UserModel = types
+export const UserModel = types
   .model({
     id: types.optional(types.number, 0),
     username: types.optional(types.string, ''),

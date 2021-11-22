@@ -3,13 +3,16 @@ import { observer } from 'mobx-react';
 import React from 'react';
 import { toast } from 'react-toastify';
 import instance from 'src/helpers/instance';
-import { useCollection } from 'src/stores/collection';
+import useStore from 'src/stores';
+import { useCollection, useCollections } from 'src/stores/collection';
 import { usePins } from 'src/stores/pin';
 
 import Button from '../Layout/Button';
 import Modal from '../Layout/Modal';
 
 const ModalDeletePin = () => {
+  const { collectionModel } = useStore();
+  const { deletePin } = useCollections();
   const { detailPin, isModalShowDeletePin, toggleModalShowDeletePin } = usePins();
   const collection = useCollection();
   // eslint-disable-next-line object-curly-newline
@@ -21,6 +24,8 @@ const ModalDeletePin = () => {
       setLoading(true);
       await instance.delete(`/pin/${id}/${collection.id}`);
       collection.deletePin(id);
+      deletePin(collection.id, id);
+      collectionModel.deletePin(collection.id, id);
       toast.success('Đã xóa');
       toggleModalShowDeletePin();
     } catch (error) {

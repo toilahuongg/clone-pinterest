@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 import React from 'react';
 import { toast } from 'react-toastify';
 import instance from 'src/helpers/instance';
+import useStore from 'src/stores';
 import { useCollections } from 'src/stores/collection';
 
 import Button from '../Layout/Button';
@@ -11,6 +12,7 @@ import Modal from '../Layout/Modal';
 import styles from './collection.module.scss';
 
 const ModalFormCollection = () => {
+  const { collectionModel } = useStore();
   const { detailCollection, isModalShowFormCollection, toggleModalShowFormCollection, addCollection, editCollection } =
     useCollections();
   // eslint-disable-next-line object-curly-newline
@@ -23,10 +25,12 @@ const ModalFormCollection = () => {
       if (typeForm === 'add') {
         const response = await instance.post('/collection', { title, isPublic });
         addCollection(response.data);
+        collectionModel.addCollection(response.data);
         toast.success('Tạo bộ sưu tập thành công');
       } else {
         const response = await instance.put(`/collection/${id}`, { title, isPublic });
         editCollection(response.data);
+        collectionModel.editCollection(response.data);
         toast.success('Chỉnh sửa bộ sưu tập thành công');
       }
       toggleModalShowFormCollection();

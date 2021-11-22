@@ -3,12 +3,14 @@ import { observer } from 'mobx-react';
 import React from 'react';
 import { toast } from 'react-toastify';
 import instance from 'src/helpers/instance';
+import useStore from 'src/stores';
 import { useCollections } from 'src/stores/collection';
 
 import Button from '../Layout/Button';
 import Modal from '../Layout/Modal';
 
 const ModalDeleteCollection = () => {
+  const { collectionModel } = useStore();
   const { detailCollection, isModalShowDeleteCollection, toggleModalShowDeleteCollection, deleteCollection } =
     useCollections();
   // eslint-disable-next-line object-curly-newline
@@ -20,6 +22,7 @@ const ModalDeleteCollection = () => {
       setLoading(true);
       await instance.delete(`/collection/${id}`);
       deleteCollection(id);
+      collectionModel.deleteCollection(id);
       toast.success('Đã xóa');
       toggleModalShowDeleteCollection();
     } catch (error) {

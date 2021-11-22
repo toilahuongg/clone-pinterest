@@ -100,6 +100,10 @@ export const ListCollectionModel = types
       const idx = self.listCollection.findIndex((item) => item.id === cId);
       if (idx >= 0) self.listCollection[idx].editPin(pId, pin);
     },
+    deletePin: (cId: number, pId: number) => {
+      const idx = self.listCollection.findIndex((item) => item.id === cId);
+      if (idx >= 0) self.listCollection[idx].deletePin(pId);
+    },
   }));
 
 interface IListCollectionModel extends Instance<typeof ListCollectionModel> {}
