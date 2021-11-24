@@ -36,8 +36,8 @@ const App: React.FC = () => {
           <Switch>
             <Route exact path="/" component={Home} />
             <Route path="/playground" component={Playground} />
-            <Route exact path="/profile" component={Profile} />
-            <Route exact path="/settings" component={Settings} />
+            <PrivateRouter exact path="/profile" component={Profile} />
+            <PrivateRouter exact path="/settings" component={Settings} />
             <Route path="/profile/:username" component={Profile} />
             <Route path="/collection/:slug" component={Collection} />
             <Route path="/pin/:slug" component={Pin} />

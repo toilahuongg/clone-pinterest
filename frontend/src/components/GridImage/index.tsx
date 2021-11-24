@@ -24,9 +24,9 @@ const GridImage: React.FC<{ items: IPinModelOut[]; isShowAction: boolean }> = ({
     return window.removeEventListener('resize', () => {});
   }, [items, listRef]);
 
-  const listItem = useResponseImage(items, screenWidth);
+  const { images: listItem, divHeight } = useResponseImage(items, screenWidth);
   return (
-    <div ref={listRef} className={styles.gridImage}>
+    <div ref={listRef} className={styles.gridImage} style={{ height: `${divHeight + 50}px` }}>
       {listItem.map((image) => (
         <ImageItem key={image.id} item={image} isShowAction={isShowAction} />
       ))}

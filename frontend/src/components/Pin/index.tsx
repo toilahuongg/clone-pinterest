@@ -3,7 +3,7 @@ import { applySnapshot } from 'mobx-state-tree';
 import React, { useEffect } from 'react';
 import { BsFillBookmarksFill } from 'react-icons/bs';
 import { FaUser } from 'react-icons/fa';
-import { Redirect, useParams } from 'react-router-dom';
+import { Link, Redirect, useParams } from 'react-router-dom';
 import instance from 'src/helpers/instance';
 import useComments from 'src/stores/comment';
 import { usePins } from 'src/stores/pin';
@@ -19,10 +19,7 @@ const Pin = () => {
   if (!slug) return <Redirect to="/" />;
   const { detailPin, toggleModalShowAddPinToCollection } = usePins();
   const { getUser, detailUser: user } = useUsers();
-  const { detailComment, listComment, isLoading, addComment, setLoading } = useComments();
-  useEffect(() => {
-    getUser(detailPin.user_id, false);
-  }, [detailPin.user_id]);
+  const { detailComment, listComment, addComment } = useComments();
 
   useEffect(() => {
     document.title = detailPin.isLoading ? 'Loading...' : detailPin.title;
@@ -34,25 +31,17 @@ const Pin = () => {
         detailPin.setLoading(true);
         const response = await instance.get(`/pin/${slug}`);
         applySnapshot(detailPin, response.data);
+        await getUser(response.data.user_id, false);
+        const response2 = await instance.get(`/comment/${detailPin.id}`);
+        applySnapshot(listComment, response2.data);
+      } catch {
+        window.location.href = '/';
       } finally {
         detailPin.setLoading(false);
       }
     };
     run();
   }, [slug]);
-
-  useEffect(() => {
-    const run = async () => {
-      try {
-        setLoading(true);
-        const response = await instance.get(`/comment/${detailPin.id}`);
-        applySnapshot(listComment, response.data);
-      } finally {
-        setLoading(false);
-      }
-    };
-    run();
-  }, [detailPin.id]);
 
   const handleSubmitComment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,15 +60,28 @@ const Pin = () => {
       detailComment.setLoading(false);
     }
   };
-  return detailPin.isLoading || user.isLoading || isLoading ? (
+  return detailPin.isLoading ? (
     <div className="loader size-lg" />
   ) : (
     <div className={styles.wrapper}>
-      <div className={styles.featuredImage}>
-        <img
-          src={`${process.env.REACT_APP_SERVER}/${process.env.REACT_APP_FOLDER_IMAGE}/${detailPin.featuredImage}`}
-          alt=""
-        />
+      <div className={styles.image}>
+        <div className={styles.featuredImage}>
+          <img
+            src={`${process.env.REACT_APP_SERVER}/${process.env.REACT_APP_FOLDER_IMAGE}/${detailPin.featuredImage}`}
+            alt=""
+          />
+          <div className={styles.link}>
+            {detailPin.link ? (
+              <a href={detailPin.link}> Chuyển sang liên kết </a>
+            ) : (
+              <a
+                href={`${process.env.REACT_APP_SERVER}/${process.env.REACT_APP_FOLDER_IMAGE}/${detailPin.featuredImage}`}
+              >
+                Xem hình ảnh
+              </a>
+            )}
+          </div>
+        </div>
       </div>
       <div className={styles.pin}>
         <h1 className={styles.title}>{detailPin.title}</h1>
@@ -94,7 +96,9 @@ const Pin = () => {
               <FaUser size="48" color="rgb(108 108 108)" />
             )}
           </div>
-          <h3 className={styles.fullname}>{user.fullname}</h3>
+          <h3 className={styles.fullname}>
+            <Link to={`/profile/${user.username}`}> {user.fullname} </Link>
+          </h3>
         </div>
         <div className={styles.content}>{detailPin.content}</div>
         <div className={styles.formContent}>

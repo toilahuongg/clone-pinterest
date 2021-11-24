@@ -14,14 +14,19 @@ def getPinBySlug(slug):
 
 @pinRouter.route('', methods=["GET"])
 def getAllPin():
-  pins = Pin.query.all()
-  return jsonify(pins)
+  title = request.args.get('title', '')
+  limit = request.args.get('limit', 30)
+  page = request.args.get('page', 0)
+  pins = Pin.query.filter(Pin.title.like('%'+title+'%')).order_by(Pin.id.desc()).offset(int(limit)*int(page)).limit(int(limit)).all()
+  count = Pin.query.count()
+  return jsonify({ 'count': count, 'pins': pins})
 
 @pinRouter.route('', methods=["POST"])
 @Auth
 def postPin():
   title = request.form.get('title', '')
   content = request.form.get('content', '')
+  link = request.form.get('link', '')
   width = request.form.get('width', 0)
   height = request.form.get('height', 0)
   collectionId = request.form.get('collection', '')
@@ -41,7 +46,8 @@ def postPin():
     height=height,
     featuredImage=featuredImage,
     user=user,
-    slug=slug(title)
+    slug=slug(title),
+    link=link
   )
   collection.pins.append(pin)
   db.session.add(collection)
@@ -53,6 +59,7 @@ def postPin():
 def putPin(id):
   title = request.form.get('title', '')
   content = request.form.get('content', '')
+  link = request.form.get('link', '')
   width = request.form.get('width', 0)
   height = request.form.get('height', 0)
   fileFeaturedImage = request.files.get('featuredImage', '')
@@ -67,7 +74,8 @@ def putPin(id):
   newData = dict(
     title=title,
     content=content,
-    slug=slug(title)
+    slug=slug(title),
+    link=link
   )
   if (featuredImage):
     newData['featuredImage'] = featuredImage

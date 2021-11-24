@@ -22,7 +22,7 @@ const ModalFormPin: React.FC<{ cId?: number }> = ({ cId }) => {
   const { collectionModel } = useStore();
   const { listCollection, isLoading, addPin, editPin } = useCollections();
   // eslint-disable-next-line object-curly-newline
-  const { title, content, featuredImage, typeForm, setTitle, setContent } = detailPin;
+  const { title, content, featuredImage, typeForm, link, setLink, setTitle, setContent } = detailPin;
   useEffect(() => {
     setCImage(featuredImage);
     return () => {
@@ -42,6 +42,7 @@ const ModalFormPin: React.FC<{ cId?: number }> = ({ cId }) => {
       formData.append('title', title);
       formData.append('content', content || '');
       formData.append('collection', collection);
+      formData.append('link', link || '');
       if (fileFeaturedImage) {
         formData.append('featuredImage', fileFeaturedImage);
         const infoImage = await getImage(fileFeaturedImage);
@@ -138,6 +139,13 @@ const ModalFormPin: React.FC<{ cId?: number }> = ({ cId }) => {
                 placeholder="Nhập nội dung..."
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
+              />
+              <Form.Input
+                type="text"
+                label="Link"
+                placeholder="URL..."
+                value={link || ''}
+                onChange={(e) => setLink(e.target.value)}
               />
             </div>
           </div>

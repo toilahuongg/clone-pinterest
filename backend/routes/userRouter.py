@@ -199,7 +199,7 @@ def getUserById(userId):
 
 @userRouter.route('/<userId>/collection', methods=["GET"])
 def getListCollection(userId):
-  collections = Collection.query.filter_by(user_id=userId).all()
+  collections = Collection.query.filter_by(user_id=userId).order_by(Collection.id.desc()).all()
   result = []
   for collection in collections:
     dictCollection = json.loads(json.dumps(collection))

@@ -89,18 +89,20 @@ class Pin(db.Model):
   featuredImage: str
   user_id: int
   slug: str
+  link: str
   createdAt: datetime
   updatedAt: datetime
 
   id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-  title = db.Column(db.String(100), nullable=False)
+  title = db.Column(db.String(10000), nullable=False)
   content = db.Column(db.String(4294000000))
   width = db.Column(db.Integer)
   height = db.Column(db.Integer)
-  featuredImage = db.Column(db.String(100), nullable=False)
+  featuredImage = db.Column(db.String(10000), nullable=False)
   user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete="CASCADE"), nullable=False)
   comments = db.relationship('Comment', backref='pin', lazy=True)
-  slug = db.Column(db.String(100), nullable=False)
+  slug = db.Column(db.String(10000), nullable=False)
+  link = db.Column(db.String(10000))
   createdAt = db.Column(db.DateTime, default=db.func.now())
   updatedAt = db.Column(db.DateTime, default=db.func.now(), server_onupdate=db.func.now())
 

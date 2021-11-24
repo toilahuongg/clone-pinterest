@@ -25,9 +25,6 @@ const Collection = () => {
   const collection = useCollection();
   const { title, isPublic, user_id: userId, fetched, setFetched } = collection;
   const { getUser, detailUser: user } = useUsers();
-  useEffect(() => {
-    getUser(userId, false);
-  }, []);
   const { userModel } = useStore();
   const { detailUser } = userModel;
   const isYourself = detailUser.id === userId;
@@ -42,8 +39,11 @@ const Collection = () => {
       try {
         collection.setLoading(true);
         const response = await instance.get(`/collection/${slug}`);
+        await getUser(response.data.user_id, false);
         applySnapshot(collection, response.data);
         setFetched(true);
+      } catch {
+        window.location.href = '/';
       } finally {
         collection.setLoading(false);
       }
@@ -58,16 +58,16 @@ const Collection = () => {
       <div className={styles.header}>
         <h1 className={styles.title}>{title}</h1>
         <div className={styles.avatar}>
-          {user?.avatar ? (
+          {user.avatar ? (
             <img
-              src={`${process.env.REACT_APP_SERVER}/${process.env.REACT_APP_FOLDER_IMAGE}/${user?.avatar}`}
+              src={`${process.env.REACT_APP_SERVER}/${process.env.REACT_APP_FOLDER_IMAGE}/${user.avatar}`}
               alt="avatar"
             />
           ) : (
             <FaUser size="24" color="rgb(108 108 108)" />
           )}
         </div>
-        <h4 className={styles.fullname}>{user?.fullname}</h4>
+        <h4 className={styles.fullname}>{user.fullname}</h4>
       </div>
       <GridImage items={getSnapshot(collection.pins)} isShowAction={isYourself} />
       {isYourself && (

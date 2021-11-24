@@ -106,7 +106,7 @@ const SettingInfomation = () => {
       )}
       <Form.Input
         type="file"
-        label="Avatar"
+        label="Cover"
         accept=".png,.jpg,.jpeg,.gif"
         onChange={(e) => {
           const file = e.target.files ? e.target.files[0] : null;

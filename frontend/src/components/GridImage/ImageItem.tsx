@@ -22,7 +22,7 @@ const ImageItem: React.FC<{ item: TResponseImage; isShowAction: boolean }> = ({ 
   const isYourself = userModel.detailUser.id === userId;
   const saved = !!collectionModel.listCollection.find(({ listPinIds }) => listPinIds.includes(item.id));
   return (
-    <div key={id} className={styles.item} style={{ transform: `translate(${left}px, ${top}px)` }}>
+    <div key={id} className={styles.item} style={{ transform: `translate(${left}px, ${top}px)`, width: `${width}px` }}>
       <div className={styles.featuredImage} style={{ width: `${width}px`, height: `${height}px` }}>
         <Lazyload>
           <img

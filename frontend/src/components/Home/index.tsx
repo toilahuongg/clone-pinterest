@@ -1,26 +1,57 @@
 import { observer } from 'mobx-react';
 import { applySnapshot, getSnapshot } from 'mobx-state-tree';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import GridImage from 'src/components/GridImage';
-import instance from 'src/helpers/instance';
 import { usePins } from 'src/stores/pin';
 
 const Home = () => {
-  const { listPin, isLoading, setLoading } = usePins();
+  // eslint-disable-next-line
+  const { listPin, isLoading, page, title, countPin, incrementPage, setPage, getPins, setLoading } = usePins();
+  const loadMore = useRef(null);
+  const run = async () => {
+    setLoading(true);
+    await getPins();
+    setLoading(false);
+  };
   useEffect(() => {
     document.title = 'Clone Pinterest';
-    const run = async () => {
-      setLoading(true);
-      const response = await instance.get('/pin');
-      applySnapshot(listPin, response.data);
-      setLoading(false);
-    };
-    run();
   }, []);
-  return isLoading ? (
-    <div className="loader size-lg" />
-  ) : (
-    <GridImage items={getSnapshot(listPin)} isShowAction={false} />
+  useEffect(() => {
+    applySnapshot(listPin, []);
+    setPage(0);
+  }, [title]);
+  useEffect(() => {
+    run();
+  }, [page, title]);
+
+  useEffect(() => {
+    document.title = 'Clone Pinterest';
+    if (loadMore.current) {
+      const obss = new IntersectionObserver(
+        async (entry) => {
+          if (entry[0].isIntersecting) {
+            incrementPage();
+            if (listPin.length >= countPin) {
+              obss.unobserve(entry[0].target);
+            }
+          }
+        },
+        {
+          root: null,
+          rootMargin: '0px',
+          threshold: 0,
+        },
+      );
+      obss.observe(loadMore.current);
+    }
+  }, [countPin, loadMore.current]);
+  return (
+    <>
+      <GridImage items={getSnapshot(listPin)} isShowAction={false} />
+      <div ref={loadMore} style={{ height: '50px' }}>
+        {isLoading && <div className="loader size-lg"> </div>}
+      </div>
+    </>
   );
 };
 

@@ -1,13 +1,14 @@
 import { observer } from 'mobx-react';
 import { applySnapshot } from 'mobx-state-tree';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { FaUser } from 'react-icons/fa';
 import { FiSearch } from 'react-icons/fi';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useHistory } from 'react-router-dom';
 import Login from 'src/components/Login';
 import Register from 'src/components/Register';
 import useAuth from 'src/hooks/useAuth';
 import useStore from 'src/stores';
+import { usePins } from 'src/stores/pin';
 
 import Dropdown from '../Dropdown';
 import List from '../List';
@@ -15,10 +16,14 @@ import Modal from '../Modal';
 import styles from './header.module.scss';
 
 const Header: React.FC = () => {
+  const history = useHistory();
   const { isAuth, removeToken } = useAuth();
   const { userModel } = useStore();
   const { detailUser } = userModel;
   const [isActive, setActive] = useState<boolean>(false);
+  const [searchTitle, setSearchTitle] = useState<string>('');
+  const timeTypingRef = useRef<any>(null);
+  const { setTitle } = usePins();
   const toggleActive = () => setActive(!isActive);
 
   const [modalRegisterActive, setModalRegisterActive] = useState<boolean>(false);
@@ -34,6 +39,16 @@ const Header: React.FC = () => {
     removeToken();
     window.location.href = '/';
   };
+
+  const handleChangeSearchTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTitle(e.target.value);
+    if (timeTypingRef.current) clearTimeout(timeTypingRef.current);
+    timeTypingRef.current = setTimeout(() => {
+      setTitle(e.target.value);
+      history.push('/');
+    }, 300);
+  };
+
   return (
     <header className={styles.header}>
       <ul className={styles.navbar}>
@@ -46,7 +61,7 @@ const Header: React.FC = () => {
           <NavLink to="/">Trang chủ</NavLink>
         </li>
         <li className={styles.search}>
-          <input type="text" placeholder="Tìm kiếm" />
+          <input value={searchTitle} onChange={handleChangeSearchTitle} type="text" placeholder="Tìm kiếm" />
           <span>
             <FiSearch />
           </span>

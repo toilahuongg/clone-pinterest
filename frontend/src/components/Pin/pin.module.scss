@@ -59,23 +59,50 @@
   margin: 20px auto;
   display: grid;
   grid-template-columns: 2fr 3fr;
-  border-radius: 20px;
-  box-shadow: 0 0 10px rgba($color: #000000, $alpha: 0.1);
-  & > .featuredImage {
-    img {
-      width: 100%;
-      height: auto;
-      border-radius: 20px 0 0 20px;
-      object-fit: cover;
+  border-radius: 30px;
+  box-shadow: 0 0 20px rgba($color: #000000, $alpha: 0.1);
+  padding: 20px;
+  & > .image {
+    padding-right: 10px;
+    .featuredImage {
+      position: relative;
+      img {
+        width: 100%;
+        height: auto;
+        border-radius: 20px;
+        object-fit: cover;
+      }
+      &:hover {
+        .link {
+          visibility: visible;
+        }
+      }
+      .link {
+        position: absolute;
+        bottom: 5px;
+        left: 5px;
+        padding: 0.75em 1.5em;
+        border-radius: 20px;
+        background-color: rgba($color: #fff, $alpha: 0.9);
+        visibility: hidden;
+        a {
+          color: #000;
+          font-weight: bolder;
+          text-decoration: none;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
     }
   }
   & > .pin {
-    padding: 20px;
+    padding-left: 10px;
     position: relative;
     .save {
       position: absolute;
-      top: 10px;
-      right: 20px;
+      top: 0;
+      right: 0;
       .btnSave {
         width: 32px;
         height: 32px;
@@ -96,8 +123,9 @@
     }
     .title {
       padding: 20px 0;
-      font-size: 20px;
-      font-weight: 500;
+      font-size: 32px;
+      font-weight: bolder;
+      line-height: 1.25em;
     }
     .user {
       display: flex;
@@ -108,6 +136,9 @@
         border-radius: 50%;
         overflow: hidden;
         margin-right: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         img {
           width: 48px;
           height: 48px;
@@ -129,8 +160,11 @@
     }
 
     .content {
-      padding: 10px 0;
+      padding: 10px;
       margin-bottom: 10px;
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.25em;
     }
     .formContent {
       form {
@@ -181,6 +215,9 @@
         border-radius: 50%;
         overflow: hidden;
         margin-right: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         img {
           width: 48px;
           height: 48px;
