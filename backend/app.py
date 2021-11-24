@@ -21,10 +21,6 @@ app.register_blueprint(roleRouter, url_prefix='/api/role')
 app.register_blueprint(pinRouter, url_prefix='/api/pin')
 app.register_blueprint(commentRouter, url_prefix='/api/comment')
 
-@app.route("/")
-def serve():
-    return os.getenv('DATABASE_URI')
-
 #Command
 if not os.getenv('FLASK_ENV') == 'production':
     app.cli.command('db_create')(db_create)

@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from flask import Blueprint, json, request, jsonify
-import re, bcrypt, jwt, os
+import re, bcrypt, jwt
 from helpers.files import removeFile, uploadFile
 from models import User, Role, Collection, db
 from middlewares import Auth

@@ -31,3 +31,4 @@ def getCommentByPin(id):
     dictComment['user'] = json.loads(json.dumps(User.query.filter_by(id=comment.user_id).first()))
     result.append(dictComment)
   return jsonify(result)
+
