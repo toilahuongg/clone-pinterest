@@ -10,6 +10,7 @@ const CommentModel = types
     user_id: types.optional(types.number, 0),
     pin_id: types.optional(types.number, 0),
     user: types.optional(UserModel, {}),
+    createdAt: types.optional(types.string, ''),
   })
   .volatile<{ isLoading: boolean }>(() => ({ isLoading: false }))
   .actions((self) => ({

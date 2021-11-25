@@ -1,15 +1,27 @@
+from typing import Any
 from flask import Blueprint, json, request, jsonify
 from middlewares import Auth
-from models import Collection, User, db
+from models import Collection, User, db, Pin
 from helpers.slug import slug
 collectionRouter = Blueprint('collectionRouter', __name__)
+
+@collectionRouter.route('/<slug>/pins', methods=["GET"])
+def getPinByCollection(slug):
+  title = request.args.get('title', '')
+  limit = request.args.get('limit', 30)
+  page = request.args.get('page', 0)
+  collection = Collection.query.filter_by(slug=slug).first()
+  listId = list(map(lambda item: item.id, collection.pins))
+  pins = Pin.query.filter(Pin.id.in_(listId), Pin.title.like("%"+title+"%")).order_by(Pin.id.desc()).offset(int(limit)*int(page)).limit(int(limit)).all()
+  count = Pin.query.filter(Pin.id.in_(listId), Pin.title.like("%"+title+"%")).count()
+  return jsonify({ 'count': count, 'pins': pins })
 
 @collectionRouter.route('/<slug>', methods=["GET"])
 def getCollectionBySlug(slug):
   collection = Collection.query.filter_by(slug=slug).first()
   if not collection: return jsonify({'error': 'Collection không tồn tại'})
   result = json.loads(json.dumps(collection))
-  result['pins'] = list(json.loads(json.dumps(collection.pins)))[::-1]
+  # result['pins'] = list(json.loads(json.dumps(collection.pins)))[::-1]
   return jsonify(result)
 
 
@@ -30,7 +42,10 @@ def postCollection():
     user=user
   )
   db.session.add(collection)
-  db.session.commit()
+  try:
+    db.session.commit()
+  except: 
+    print("lỗi")
   return jsonify(collection)
 
 @collectionRouter.route('/<id>', methods=["PUT"])
@@ -46,7 +61,10 @@ def putCollection(id):
     isPublic=isPublic,
     slug=slug(title)
   ))
-  db.session.commit()
+  try:
+    db.session.commit()
+  except: 
+    print("lỗi")
   collection = Collection.query.filter_by(id=id).first()
   if not collection: return jsonify({'error': 'Collection không tồn tại'})
   result = json.loads(json.dumps(collection))
@@ -59,6 +77,9 @@ def deleteCollection(id):
   collection = Collection.query.filter_by(id=id, user_id = request.userId).first()
   if not collection: return jsonify({'error': 'Không tồn tại bộ sưu tập'}), 400
   db.session.delete(collection)
-  db.session.commit()
+  try:
+    db.session.commit()
+  except: 
+    print("lỗi")
   return jsonify(collection),200
 

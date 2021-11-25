@@ -142,13 +142,14 @@
         img {
           width: 48px;
           height: 48px;
-          max-width: 48px;
-          max-height: 48px;
+          min-width: 48px;
+          min-height: 48px;
           object-fit: cover;
         }
       }
       .fullname {
         font-weight: 500;
+        padding: 5px 0;
         a {
           color: #000;
           text-decoration: none;
@@ -156,6 +157,10 @@
             text-decoration: underline;
           }
         }
+      }
+      .time {
+        color: rgb(130, 130, 130);
+        font-size: 12px;
       }
     }
 
@@ -167,28 +172,33 @@
       line-height: 1.25em;
     }
     .formContent {
+      
       form {
         display: flex;
-        gap: 10px;
       }
-      input, button {
-        padding: 0.5em;
-        border-radius: 0.5em;
-        border: 2px solid;
+      .avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-right: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img {
+          width: 42px;
+          height: 42px;
+          min-width: 42px;
+          min-height: 42px;
+          object-fit: cover;
+        }
       }
       input {
-        width: 100%;
+        padding: 0.5em 1.25em;
+        border-radius: 2em;
+        border: 1px solid;
+        flex: 1;
         border-color: rgb(216, 214, 214);
-      }
-      button {
-        color: #fff;
-        border-color: rgb(0, 199, 13);
-        background-color: rgb(0, 199, 13);
-        padding: 0 10px;
-        font-weight: bolder;
-        &:hover {
-          background-color: rgb(5, 184, 17);
-        }
       }
     }
     .listComment {
@@ -199,19 +209,36 @@
         display: flex;
         margin-bottom: 10px;
         .body {
+          border: 1px solid #ddd;
+          flex: 1;
+          padding: 0.75em;
+          border-radius: 20px;
           .fullname {
-            margin-top: 5px;
-            font-weight: 500;
+            font-weight: bolder;
+            font-size: 14px;
+            a {
+              color: #000;
+              text-decoration: none;
+              &:hover {
+                text-decoration: underline;
+              }
+            }
+            .time {
+              color: rgb(130, 130, 130);
+              font-size: 12px;
+              font-weight: 400;
+              padding-left: 5px;
+            }
           }
           .cmtContent {
-            font-size: 14px;
+            font-size: 12px;
             padding: 5px 0;
           }
         }
       }
       .avatar {
-        width: 48px;
-        height: 48px;
+        width: 42px;
+        height: 42px;
         border-radius: 50%;
         overflow: hidden;
         margin-right: 10px;
@@ -219,10 +246,10 @@
         justify-content: center;
         align-items: center;
         img {
-          width: 48px;
-          height: 48px;
-          max-width: 48px;
-          max-height: 48px;
+          width: 42px;
+          height: 42px;
+          min-width: 42px;
+          min-height: 42px;
           object-fit: cover;
         }
       }

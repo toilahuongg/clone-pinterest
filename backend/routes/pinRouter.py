@@ -18,7 +18,7 @@ def getAllPin():
   limit = request.args.get('limit', 30)
   page = request.args.get('page', 0)
   pins = Pin.query.filter(Pin.title.like('%'+title+'%')).order_by(Pin.id.desc()).offset(int(limit)*int(page)).limit(int(limit)).all()
-  count = Pin.query.count()
+  count = Pin.query.filter(Pin.title.like('%'+title+'%')).count()
   return jsonify({ 'count': count, 'pins': pins})
 
 @pinRouter.route('', methods=["POST"])
@@ -97,7 +97,10 @@ def deletePin(id, cId):
   else:
     removeFile(pin.featuredImage)
     db.session.delete(pin)
-  db.session.commit()
+  try:
+    db.session.commit()
+  except: 
+    print("lỗi")
   return jsonify('ok'),200
 
 @pinRouter.route('/add-to-collection', methods=["POST"])
@@ -111,5 +114,8 @@ def addToCollection():
   if not collection: return jsonify({'error': 'Không tồn tại Bộ sưu tập'}), 400
   collection.pins.append(pin)
   db.session.add(collection)
-  db.session.commit()
+  try:
+    db.session.commit()
+  except: 
+    print("lỗi")
   return jsonify('ok'),200

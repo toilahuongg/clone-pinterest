@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import instance from 'src/helpers/instance';
 import useStore from 'src/stores';
+import { useCollections } from 'src/stores/collection';
 import { usePins } from 'src/stores/pin';
 
 import Button from '../Layout/Button';
@@ -14,6 +15,7 @@ import Modal from '../Layout/Modal';
 const ModalAddToCollection = () => {
   const [collection, setCollection] = useState<string>();
   const { detailPin, isModalShowAddPinToCollection, toggleModalShowAddPinToCollection } = usePins();
+  const yourCollections = useCollections();
   const { collectionModel } = useStore();
   const { listCollection, isLoading, addPin } = collectionModel;
   const options = [
@@ -32,6 +34,7 @@ const ModalAddToCollection = () => {
         cId: parseInt(collection || '0', 10),
       });
       addPin(parseInt(collection || '0', 10), getSnapshot(detailPin));
+      yourCollections.addPin(parseInt(collection || '0', 10), getSnapshot(detailPin));
       toggleModalShowAddPinToCollection();
       toast.success('Đã thêm vào bộ sưu tập');
     } catch (error) {

@@ -2,15 +2,16 @@ import { observer } from 'mobx-react';
 import { applySnapshot, getSnapshot } from 'mobx-state-tree';
 import { useEffect, useRef } from 'react';
 import GridImage from 'src/components/GridImage';
-import { usePins } from 'src/stores/pin';
+import useStore from 'src/stores';
 
 const Home = () => {
+  const { pinModel } = useStore();
   // eslint-disable-next-line
-  const { listPin, isLoading, page, title, countPin, incrementPage, setPage, getPins, setLoading } = usePins();
+  const { listPin, isLoading, page, title, countPin, incrementPage, setPage, getPins, setLoading } = pinModel;
   const loadMore = useRef(null);
   const run = async () => {
     setLoading(true);
-    await getPins();
+    await getPins(title);
     setLoading(false);
   };
   useEffect(() => {

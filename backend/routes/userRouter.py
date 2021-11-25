@@ -54,7 +54,10 @@ def register():
       role=role
     )
     db.session.add(user)
-    db.session.commit()
+    try:
+      db.session.commit()
+    except: 
+      print("lỗi")
 
     return jsonify(user),200
   except NameError:
@@ -141,7 +144,10 @@ def updateInfomation():
   if (avatar):  newData['avatar'] = avatar
   User.query.filter_by(id=request.userId).update(newData)
   
-  db.session.commit()
+  try:
+    db.session.commit()
+  except: 
+    print("lỗi")
   return jsonify({ 'avatar': avatar, 'cover': cover }),200
 
 @userRouter.route('/change-password', methods=['PUT'])

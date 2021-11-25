@@ -17,7 +17,10 @@ def postComment():
   )
   pin.comments.append(comment)
   db.session.add(pin)
-  db.session.commit()
+  try:
+    db.session.commit()
+  except: 
+    print("lỗi")
   result = json.loads(json.dumps(comment))
   result['user'] = json.loads(json.dumps(User.query.filter_by(id=userId).first()))
   return jsonify(result)

@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react';
 import { applySnapshot } from 'mobx-state-tree';
+import moment from 'moment';
 import React, { useEffect } from 'react';
 import { BsFillBookmarksFill } from 'react-icons/bs';
 import { FaUser } from 'react-icons/fa';
@@ -72,10 +73,14 @@ const Pin = () => {
           />
           <div className={styles.link}>
             {detailPin.link ? (
-              <a href={detailPin.link}> Chuyển sang liên kết </a>
+              <a href={detailPin.link} target="_blank" rel="noreferrer">
+                Chuyển sang liên kết
+              </a>
             ) : (
               <a
                 href={`${process.env.REACT_APP_SERVER}/${process.env.REACT_APP_FOLDER_IMAGE}/${detailPin.featuredImage}`}
+                target="_blank"
+                rel="noreferrer"
               >
                 Xem hình ảnh
               </a>
@@ -87,52 +92,70 @@ const Pin = () => {
         <h1 className={styles.title}>{detailPin.title}</h1>
         <div className={styles.user}>
           <div className={styles.avatar}>
-            {user.avatar ? (
-              <img
-                src={`${process.env.REACT_APP_SERVER}/${process.env.REACT_APP_FOLDER_IMAGE}/${user.avatar}`}
-                alt={`avatar of ${user.fullname}`}
-              />
-            ) : (
-              <FaUser size="48" color="rgb(108 108 108)" />
-            )}
+            <Link to={`/profile/${user.username}`}>
+              {user.avatar ? (
+                <img
+                  src={`${process.env.REACT_APP_SERVER}/${process.env.REACT_APP_FOLDER_IMAGE}/${user.avatar}`}
+                  alt={`avatar of ${user.fullname}`}
+                />
+              ) : (
+                <FaUser size="48" color="rgb(108 108 108)" />
+              )}
+            </Link>
           </div>
-          <h3 className={styles.fullname}>
-            <Link to={`/profile/${user.username}`}> {user.fullname} </Link>
-          </h3>
+          <div>
+            <h3 className={styles.fullname}>
+              <Link to={`/profile/${user.username}`}> {user.fullname} </Link>
+            </h3>
+            <p className={styles.time}>{moment(detailPin.createdAt).fromNow()}</p>
+          </div>
         </div>
         <div className={styles.content}>{detailPin.content}</div>
-        <div className={styles.formContent}>
-          <Form onSubmit={handleSubmitComment}>
-            <input
-              type="text"
-              value={detailComment.content}
-              onChange={(e) => detailComment.setContent(e.target.value)}
-              placeholder="Enter..."
-            />
-            <button type="submit"> {detailComment.isLoading ? 'Loading...' : 'Gửi'} </button>
-          </Form>
-        </div>
-
         <ul className={styles.listComment}>
           {listComment.map((comment) => (
             <li key={comment.id}>
               <div className={styles.avatar}>
-                {comment.user.avatar ? (
-                  <img
-                    src={`${process.env.REACT_APP_SERVER}/${process.env.REACT_APP_FOLDER_IMAGE}/${comment.user.avatar}`}
-                    alt={`avatar of ${comment.user.fullname}`}
-                  />
-                ) : (
-                  <FaUser size="32" color="rgb(108 108 108)" />
-                )}
+                <Link to={`/profile/${comment.user.fullname}`}>
+                  {comment.user.avatar ? (
+                    <img
+                      src={`${process.env.REACT_APP_SERVER}/${process.env.REACT_APP_FOLDER_IMAGE}/${comment.user.avatar}`}
+                      alt={`avatar of ${comment.user.fullname}`}
+                    />
+                  ) : (
+                    <FaUser size="32" color="rgb(108 108 108)" />
+                  )}
+                </Link>
               </div>
               <div className={styles.body}>
-                <h4 className={styles.fullname}> {comment.user.fullname} </h4>
+                <h4 className={styles.fullname}>
+                  <Link to={`/profile/${comment.user.fullname}`}> {comment.user.fullname} </Link>{' '}
+                  <span className={styles.time}> {moment(comment.createdAt).fromNow()}</span>
+                </h4>
                 <div className={styles.cmtContent}> {comment.content} </div>
               </div>
             </li>
           ))}
         </ul>
+        <div className={styles.formContent}>
+          <Form onSubmit={handleSubmitComment}>
+            <div className={styles.avatar}>
+              {user.avatar ? (
+                <img
+                  src={`${process.env.REACT_APP_SERVER}/${process.env.REACT_APP_FOLDER_IMAGE}/${user.avatar}`}
+                  alt={`avatar of ${user.fullname}`}
+                />
+              ) : (
+                <FaUser size="32" color="rgb(108 108 108)" />
+              )}
+            </div>
+            <input
+              type="text"
+              value={detailComment.content}
+              onChange={(e) => detailComment.setContent(e.target.value)}
+              placeholder="Thêm nhận xét"
+            />
+          </Form>
+        </div>
         <div className={styles.save}>
           <Button
             className={styles.btnSave}

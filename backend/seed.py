@@ -1,12 +1,23 @@
 import os
 from random import randrange
-
+import time
 import lorem
 import requests
 from helpers.files import UPLOAD_FOLDER, optimizeFile, removeAllFile
 from helpers.slug import slug
 
 from models import db, Role, User, Collection, Pin
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+    
 sizes = ['1600/900', '1600/1200', '1200/1600', '600/900', '1200/1000']
 def db_drop():
     db.drop_all()
@@ -16,6 +27,7 @@ def db_create():
     db.create_all()
     print('Database created!')
 def db_seed():
+    start = time.time()
     listSeed = []
     roleAdmin = Role(
         name="Admin",
@@ -47,48 +59,75 @@ def db_seed():
         role=roleMember
     )
     listSeed.append(userMember)
-    collection = Collection(
+    collection1 = Collection(
         title="Test",
         user_id=1,
         isPublic=True,
         slug="test",
     )
-    listSeed.append(collection)
-    for i in range(200):
-      title = lorem.sentence()
-      slg = slug(title)
-      fileName = slg+'.jpg'
-      filePath = os.path.join(UPLOAD_FOLDER, fileName)
-      randomSize = sizes[randrange(0,len(sizes))]
-      width = randomSize.split('/')[0]
-      height = randomSize.split('/')[1]
-      if not os.path.exists(UPLOAD_FOLDER):
-        os.makedirs(UPLOAD_FOLDER)
-      with open(filePath, 'wb') as handle:
-          response = requests.get('https://picsum.photos/'+randomSize, stream=True)
+    listSeed.append(collection1)
+    collection2 = Collection(
+        title="Test 2",
+        user_id=2,
+        isPublic=True,
+        slug="test-2",
+    )
+    listSeed.append(collection2)
+    for i in range(1000):
+        title = lorem.sentence()
+        print(f"{bcolors.OKCYAN}Đang tạo pin {i}: {bcolors.BOLD}{title}{bcolors.ENDC}")
+        slg = slug(title)
+        fileName = slg+'.jpg'
+        filePath = os.path.join(UPLOAD_FOLDER, fileName)
+        randomSize = sizes[randrange(0,len(sizes))]
+        width = randomSize.split('/')[0]
+        height = randomSize.split('/')[1]
+        if not os.path.exists(UPLOAD_FOLDER):
+            os.makedirs(UPLOAD_FOLDER)
+        try:
+            with open(filePath, 'wb') as handle:
+                response = requests.get('https://picsum.photos/'+randomSize, stream=True)
 
-          if not response.ok:
-              print(response)
+                if not response.ok:
+                    print(response)
 
-          for block in response.iter_content(1024):
-              if not block:
-                  break
-              handle.write(block)
-      optimizeFile(filePath)
-      collection.pins.append(Pin(
-          title=title,
-          slug=slg,
-          width=width,
-          height=height,
-          featuredImage=fileName,
-          user_id=1,
-          content=lorem.paragraph()
-      ))
+                for block in response.iter_content(1024):
+                    if not block:
+                        break
+                    handle.write(block)
+            optimizeFile(filePath)
+        except:
+            print(f"{bcolors.FAIL}Đã xảy ra lỗi{bcolors.ENDC}")
+        rand = randrange(0,2)
+        if (rand == 0):
+            collection1.pins.append(Pin(
+                title=title,
+                slug=slg,
+                width=width,
+                height=height,
+                featuredImage=fileName,
+                user_id=1,
+                content=lorem.paragraph()
+            ))
+        else:
+            collection2.pins.append(Pin(
+                title=title,
+                slug=slg,
+                width=width,
+                height=height,
+                featuredImage=fileName,
+                user_id=2,
+                content=lorem.paragraph()
+            ))
+            
+        print(f"Trạng thái pin {i}: {bcolors.OKGREEN}Success{bcolors.ENDC}\n")
     db.session.add_all(listSeed)
     db.session.commit()
+    end = time.time()
     print('Database seed!')
+    print(f'{bcolors.OKBLUE}Time: {bcolors.OKGREEN} {"{:.2f}s".format(end-start)}{bcolors.ENDC}')
 def db_reset():
     db_drop()
     db_create()
     db_seed()
-    print('Database reset!')
+    print(f'{bcolors.OKGREEN}Database reset!{bcolors.ENDC}')

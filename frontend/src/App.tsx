@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react';
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -16,6 +16,15 @@ const Home = React.lazy(() => import('./components/Home'));
 const Collection = React.lazy(() => import('./components/Collection/Collection'));
 const Pin = React.lazy(() => import('./components/Pin'));
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    document.getElementById('root')?.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
 const App: React.FC = () => {
   const { isAuth } = useAuth();
   const { userModel, collectionModel } = useStore();
@@ -30,6 +39,7 @@ const App: React.FC = () => {
 
   return (
     <Router>
+      <ScrollToTop />
       <Header />
       <div className="app">
         <React.Suspense fallback={<div className="loader size-lg" />}>

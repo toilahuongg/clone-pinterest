@@ -14,6 +14,7 @@ const CollectionModel = types
     slug: types.optional(types.string, ''),
     pins: types.optional(types.array(PinModel), []),
     listPinIds: types.optional(types.array(types.number), []),
+    createdAt: types.optional(types.string, ''),
   })
   .volatile<{ isLoading: boolean; fetched: boolean; typeForm: 'add' | 'edit' }>(() => ({
     isLoading: false,

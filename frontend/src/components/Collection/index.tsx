@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react';
 import { applySnapshot, getSnapshot } from 'mobx-state-tree';
+import moment from 'moment';
 import { useEffect } from 'react';
 import { HiOutlineTrash, HiPencil } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
@@ -83,6 +84,10 @@ const ListCollection: React.FC<TProps> = ({ userId }) => {
           <h3 className={styles.title}>
             <Link to={`/collection/${collection.slug}`}>{collection.title}</Link>
           </h3>
+          <div className={styles.moreInfomation}>
+            <span className={styles.countPin}> {collection.listPinIds.length} Ghim </span>
+            <span className={styles.time}> {moment(collection.createdAt).fromNow()} </span>
+          </div>
         </div>
       ))}
     </div>

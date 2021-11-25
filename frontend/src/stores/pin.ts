@@ -14,6 +14,7 @@ const PinModel = types
     user_id: types.optional(types.number, 0),
     slug: types.optional(types.string, ''),
     link: types.maybeNull(types.string),
+    createdAt: types.optional(types.string, ''),
   })
   .volatile<{ isLoading: boolean; typeForm: 'add' | 'edit' }>(() => ({ isLoading: false, typeForm: 'add' }))
   .actions((self) => ({
@@ -39,7 +40,7 @@ const PinModel = types
 export interface IPinModel extends Instance<typeof PinModel> {}
 export interface IPinModelOut extends SnapshotOut<typeof PinModel> {}
 
-const ListPinModel = types
+export const ListPinModel = types
   .model({
     detailPin: types.optional(PinModel, {}),
     listPin: types.array(PinModel),
@@ -73,8 +74,9 @@ const ListPinModel = types
     setCountPin: (value: number) => {
       self.countPin = value;
     },
-    getPins: flow(function* () {
-      const response = yield instance.get('/pin', { params: { page: self.page, title: self.title } });
+    getPins: flow(function* (title: string, slug?: string) {
+      // eslint-disable-next-line
+      const response = yield instance.get(slug ? `/collection/${slug}/pins` : '/pin', {params: { page: self.page, title },});
       const { count, pins } = response.data;
       self.countPin = count;
       if (self.listPin.length < count) {

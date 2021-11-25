@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react';
 import { applySnapshot, getSnapshot } from 'mobx-state-tree';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FaUser } from 'react-icons/fa';
 import { FiPlus } from 'react-icons/fi';
 import { Redirect, useParams } from 'react-router-dom';
@@ -34,6 +34,21 @@ const Collection = () => {
   useEffect(() => {
     document.title = collection.isLoading ? 'Loading...' : collection.title;
   }, [collection.title, collection.isLoading]);
+
+  // const [tSearch, setTSearch] = useState<string>('');
+  // eslint-disable-next-line
+  const { listPin, isLoading, page, countPin, incrementPage, setPage, getPins, setLoading } = usePins();
+  const loadMore = useRef(null);
+  const fetchPins = async () => {
+    setLoading(true);
+    if (slug) await getPins('', slug);
+    setLoading(false);
+  };
+
+  // useEffect(() => {
+  //   applySnapshot(listPin, []);
+  //   setPage(0);
+  // }, [tSearch]);
   useEffect(() => {
     const run = async () => {
       try {
@@ -50,26 +65,58 @@ const Collection = () => {
     };
     if (slug) run();
   }, [slug]);
+
+  useEffect(() => {
+    fetchPins();
+  }, [page, slug]);
+
+  useEffect(() => {
+    document.title = 'Clone Pinterest';
+    if (loadMore.current) {
+      const obss = new IntersectionObserver(
+        async (entry) => {
+          if (entry[0].isIntersecting) {
+            incrementPage();
+            if (listPin.length >= countPin) {
+              obss.unobserve(entry[0].target);
+            }
+          }
+        },
+        {
+          root: null,
+          rootMargin: '0px',
+          threshold: 0,
+        },
+      );
+      obss.observe(loadMore.current);
+    }
+  }, [countPin, loadMore.current]);
+
   if (fetched && detailUser.fetched && detailUser.id !== userId && !isPublic) return <Redirect to="/" />;
-  return user.isLoading || collection.isLoading ? (
-    <div className="loader size-lg" />
-  ) : (
+  return (
     <div className={styles.collection}>
-      <div className={styles.header}>
-        <h1 className={styles.title}>{title}</h1>
-        <div className={styles.avatar}>
-          {user.avatar ? (
-            <img
-              src={`${process.env.REACT_APP_SERVER}/${process.env.REACT_APP_FOLDER_IMAGE}/${user.avatar}`}
-              alt="avatar"
-            />
-          ) : (
-            <FaUser size="24" color="rgb(108 108 108)" />
-          )}
+      {user.isLoading || collection.isLoading ? (
+        <div className="loader size-lg" />
+      ) : (
+        <div className={styles.header}>
+          <h1 className={styles.title}>{title}</h1>
+          <div className={styles.avatar}>
+            {user.avatar ? (
+              <img
+                src={`${process.env.REACT_APP_SERVER}/${process.env.REACT_APP_FOLDER_IMAGE}/${user.avatar}`}
+                alt="avatar"
+              />
+            ) : (
+              <FaUser size="24" color="rgb(108 108 108)" />
+            )}
+          </div>
+          <h4 className={styles.fullname}>{user.fullname}</h4>
         </div>
-        <h4 className={styles.fullname}>{user.fullname}</h4>
+      )}
+      <GridImage items={getSnapshot(listPin)} isShowAction={isYourself} />
+      <div ref={loadMore} style={{ height: '50px' }}>
+        {isLoading && <div className="loader size-lg"> </div>}
       </div>
-      <GridImage items={getSnapshot(collection.pins)} isShowAction={isYourself} />
       {isYourself && (
         <>
           <div className={styles.actions}>
