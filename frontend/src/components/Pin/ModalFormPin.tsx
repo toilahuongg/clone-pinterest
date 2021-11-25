@@ -18,7 +18,7 @@ const ModalFormPin: React.FC<{ cId?: number }> = ({ cId }) => {
   const [collection, setCollection] = useState<string>(`${cId}`);
   const bst = useCollection();
   const [cImage, setCImage] = useState<string | null>(null);
-  const { detailPin, isModalShowFormPin, toggleModalShowFormPin } = usePins();
+  const { detailPin, isModalShowFormPin, toggleModalShowFormPin, addPin: addPinToList } = usePins();
   const { collectionModel } = useStore();
   const { listCollection, isLoading, addPin, editPin } = useCollections();
   // eslint-disable-next-line object-curly-newline
@@ -53,6 +53,7 @@ const ModalFormPin: React.FC<{ cId?: number }> = ({ cId }) => {
       if (typeForm === 'add') {
         response = await instance.post('/pin', formData);
         addPin(parseInt(collection, 10), response.data);
+        addPinToList(response.data);
         collectionModel.addPin(parseInt(collection, 10), response.data);
         bst.addPin(response.data);
         toast.success('Tạo ghim thành công');

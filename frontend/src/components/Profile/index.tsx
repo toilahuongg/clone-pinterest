@@ -20,15 +20,14 @@ import styles from './profile.module.scss';
 
 const Profile = () => {
   const { username } = useParams<{ username: string }>();
-  const { userModel, collectionModel } = useStore();
+  const { userModel } = useStore();
   const { detailUser } = userModel;
   const { getUser, detailUser: user } = useUsers();
   useEffect(() => {
     getUser(username || 'info', true);
   }, [username]);
   const isYourself = detailUser.id === user?.id;
-  const { toggleModalShowFormCollection } = useCollections();
-  const { detailCollection } = collectionModel;
+  const { toggleModalShowFormCollection, detailCollection } = useCollections();
   const { detailPin, toggleModalShowFormPin } = usePins();
   const [isActive, setActive] = useState<boolean>(false);
   const toggleActive = () => setActive(!isActive);

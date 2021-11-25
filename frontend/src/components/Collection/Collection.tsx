@@ -21,7 +21,8 @@ import styles from './collection.module.scss';
 const Collection = () => {
   const { slug } = useParams<{ slug: string }>();
   if (!slug) return <Redirect to="/" />;
-  const { detailPin, toggleModalShowFormPin } = usePins();
+  // eslint-disable-next-line
+  const { listPin, isLoading, page, countPin, incrementPage, detailPin, toggleModalShowFormPin, getPins, setLoading } = usePins();
   const collection = useCollection();
   const { title, isPublic, user_id: userId, fetched, setFetched } = collection;
   const { getUser, detailUser: user } = useUsers();
@@ -36,8 +37,6 @@ const Collection = () => {
   }, [collection.title, collection.isLoading]);
 
   // const [tSearch, setTSearch] = useState<string>('');
-  // eslint-disable-next-line
-  const { listPin, isLoading, page, countPin, incrementPage, setPage, getPins, setLoading } = usePins();
   const loadMore = useRef(null);
   const fetchPins = async () => {
     setLoading(true);

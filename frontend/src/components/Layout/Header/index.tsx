@@ -8,7 +8,6 @@ import Login from 'src/components/Login';
 import Register from 'src/components/Register';
 import useAuth from 'src/hooks/useAuth';
 import useStore from 'src/stores';
-import { usePins } from 'src/stores/pin';
 
 import Dropdown from '../Dropdown';
 import List from '../List';
@@ -18,12 +17,11 @@ import styles from './header.module.scss';
 const Header: React.FC = () => {
   const history = useHistory();
   const { isAuth, removeToken } = useAuth();
-  const { userModel } = useStore();
+  const { userModel, pinModel } = useStore();
   const { detailUser } = userModel;
   const [isActive, setActive] = useState<boolean>(false);
   const [searchTitle, setSearchTitle] = useState<string>('');
   const timeTypingRef = useRef<any>(null);
-  const { setTitle } = usePins();
   const toggleActive = () => setActive(!isActive);
 
   const [modalRegisterActive, setModalRegisterActive] = useState<boolean>(false);
@@ -44,9 +42,9 @@ const Header: React.FC = () => {
     setSearchTitle(e.target.value);
     if (timeTypingRef.current) clearTimeout(timeTypingRef.current);
     timeTypingRef.current = setTimeout(() => {
-      setTitle(e.target.value);
+      pinModel.setTitle(e.target.value);
       history.push('/');
-    }, 300);
+    }, 500);
   };
 
   return (

@@ -29,6 +29,7 @@ const CollectionModel = types
       self.fetched = value;
     },
     setTypeForm: (value: 'add' | 'edit') => {
+      console.log(value);
       self.typeForm = value;
     },
     setTitle: (value: string) => {

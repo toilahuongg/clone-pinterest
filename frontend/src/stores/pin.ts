@@ -105,6 +105,9 @@ export const ListPinModel = types
       const idx = self.listPin.findIndex((pin) => pin.id === id);
       if (idx >= 0) self.listPin.splice(idx, 1);
     },
+    addPin: (data: IPinModelOut) => {
+      self.listPin.unshift(data);
+    },
   }));
 
 export interface IListPinModel extends Instance<typeof ListPinModel> {}
