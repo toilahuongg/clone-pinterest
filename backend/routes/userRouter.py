@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from flask import Blueprint, json, request, jsonify
-import re, bcrypt, jwt
+import re, bcrypt, jwt, os
 from helpers.files import removeFile, uploadFile
 from models import User, Role, Collection, db
 from middlewares import Auth
@@ -83,7 +83,7 @@ def login():
       'username': user.username,
       'fullname': user.fullname,
       'exp' : datetime.utcnow() + timedelta(minutes = 180)
-    }, 'toilahuong')
+    }, os.getenv('SECRET_KEY'))
     result = json.loads(json.dumps(user))
     result['token'] = token
     return jsonify(result), 200

@@ -6,6 +6,8 @@ import { BsFillBookmarksFill } from 'react-icons/bs';
 import { FaUser } from 'react-icons/fa';
 import { Link, Redirect, useParams } from 'react-router-dom';
 import instance from 'src/helpers/instance';
+import useAuth from 'src/hooks/useAuth';
+import useStore from 'src/stores';
 import useComments from 'src/stores/comment';
 import { usePins } from 'src/stores/pin';
 import { useUsers } from 'src/stores/user';
@@ -18,6 +20,8 @@ import styles from './pin.module.scss';
 const Pin = () => {
   const { slug } = useParams<{ slug: string }>();
   if (!slug) return <Redirect to="/" />;
+  const { isAuth } = useAuth();
+  const { userModel } = useStore();
   const { detailPin, toggleModalShowAddPinToCollection } = usePins();
   const { getUser, detailUser: user } = useUsers();
   const { detailComment, listComment, addComment } = useComments();
@@ -50,7 +54,6 @@ const Pin = () => {
       detailComment.setLoading(true);
       const response = await instance.post('/comment', {
         content: detailComment.content,
-        user_id: user.id,
         pin_id: detailPin.id,
       });
       addComment(response.data);
@@ -136,26 +139,28 @@ const Pin = () => {
             </li>
           ))}
         </ul>
-        <div className={styles.formContent}>
-          <Form onSubmit={handleSubmitComment}>
-            <div className={styles.avatar}>
-              {user.avatar ? (
-                <img
-                  src={`${process.env.REACT_APP_SERVER}/${process.env.REACT_APP_FOLDER_IMAGE}/${user.avatar}`}
-                  alt={`avatar of ${user.fullname}`}
-                />
-              ) : (
-                <FaUser size="32" color="rgb(108 108 108)" />
-              )}
-            </div>
-            <input
-              type="text"
-              value={detailComment.content}
-              onChange={(e) => detailComment.setContent(e.target.value)}
-              placeholder="Thêm nhận xét"
-            />
-          </Form>
-        </div>
+        {isAuth && (
+          <div className={styles.formContent}>
+            <Form onSubmit={handleSubmitComment}>
+              <div className={styles.avatar}>
+                {userModel.detailUser.avatar ? (
+                  <img
+                    src={`${process.env.REACT_APP_SERVER}/${process.env.REACT_APP_FOLDER_IMAGE}/${userModel.detailUser.avatar}`}
+                    alt={`avatar of ${userModel.detailUser.fullname}`}
+                  />
+                ) : (
+                  <FaUser size="32" color="rgb(108 108 108)" />
+                )}
+              </div>
+              <input
+                type="text"
+                value={detailComment.content}
+                onChange={(e) => detailComment.setContent(e.target.value)}
+                placeholder="Thêm nhận xét"
+              />
+            </Form>
+          </div>
+        )}
         <div className={styles.save}>
           <Button
             className={styles.btnSave}

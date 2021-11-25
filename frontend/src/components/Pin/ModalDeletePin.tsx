@@ -12,8 +12,8 @@ import Modal from '../Layout/Modal';
 
 const ModalDeletePin = () => {
   const { collectionModel } = useStore();
-  const { deletePin } = useCollections();
-  const { detailPin, isModalShowDeletePin, toggleModalShowDeletePin } = usePins();
+  const collections = useCollections();
+  const { detailPin, isModalShowDeletePin, toggleModalShowDeletePin, deletePin } = usePins();
   const collection = useCollection();
   // eslint-disable-next-line object-curly-newline
   const { id, title, isLoading, setLoading } = detailPin;
@@ -24,7 +24,8 @@ const ModalDeletePin = () => {
       setLoading(true);
       await instance.delete(`/pin/${id}/${collection.id}`);
       collection.deletePin(id);
-      deletePin(collection.id, id);
+      deletePin(id);
+      collections.deletePin(collection.id, id);
       collectionModel.deletePin(collection.id, id);
       toast.success('Đã xóa');
       toggleModalShowDeletePin();

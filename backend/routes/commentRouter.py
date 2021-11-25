@@ -8,12 +8,11 @@ commentRouter = Blueprint('commentRouter', __name__)
 @Auth
 def postComment():
   content = request.json.get('content', '')
-  userId = request.json.get('user_id', 0)
   pinId = request.json.get('pin_id', 0)
   pin = Pin.query.filter_by(id=pinId).first()
   comment = Comment(
     content=content,
-    user_id=userId,
+    user_id=request.userId,
   )
   pin.comments.append(comment)
   db.session.add(pin)
@@ -22,7 +21,7 @@ def postComment():
   except: 
     print("lỗi")
   result = json.loads(json.dumps(comment))
-  result['user'] = json.loads(json.dumps(User.query.filter_by(id=userId).first()))
+  result['user'] = json.loads(json.dumps(User.query.filter_by(id=request.userId).first()))
   return jsonify(result)
 
 @commentRouter.route('/<id>', methods=["GET"])

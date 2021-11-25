@@ -11,7 +11,7 @@ const Home = () => {
   const loadMore = useRef(null);
   const run = async () => {
     setLoading(true);
-    await getPins(title);
+    await getPins(title, undefined, true);
     setLoading(false);
   };
   useEffect(() => {

@@ -74,11 +74,12 @@ export const ListPinModel = types
     setCountPin: (value: number) => {
       self.countPin = value;
     },
-    getPins: flow(function* (title: string, slug?: string) {
+    getPins: flow(function* (title: string, slug?: string, isShuffle: boolean = false) {
       // eslint-disable-next-line
       const response = yield instance.get(slug ? `/collection/${slug}/pins` : '/pin', {params: { page: self.page, title },});
       const { count, pins } = response.data;
       self.countPin = count;
+      if (isShuffle) pins.sort(() => 0.5 - Math.random());
       if (self.listPin.length < count) {
         self.listPin = cast([...self.listPin, ...pins]);
       }
@@ -99,6 +100,10 @@ export const ListPinModel = types
     },
     toggleModalShowAddPinToCollection: () => {
       self.isModalShowAddPinToCollection = !self.isModalShowAddPinToCollection;
+    },
+    deletePin: (id: number) => {
+      const idx = self.listPin.findIndex((pin) => pin.id === id);
+      if (idx >= 0) self.listPin.splice(idx, 1);
     },
   }));
 
