@@ -18,8 +18,9 @@
 ### Run server
 ``` flask run ```
 ## Frontend
-
 ``` cd frontend ```
+- install **Nodejs**
+- copy file **.env.example** and rename this to **.env**
 ### Install packages
 ``` npm install ```
 ### Run server
